@@ -1,38 +1,58 @@
 .App {
   text-align: center;
+  background-image: url('https://images8.alphacoders.com/406/thumb-1920-406809.jpg');
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+body::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgb(143, 66, 194, 0.6);;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.cardReact:hover {
+  transform: scale(1.15);
+  transition:transform .5s ease-in-out;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.cardReact:hover img {
+  filter: hue-rotate(90deg);
+}
+
+.cardReact-anime:hover {
+  transform: scale(1.15);
+  transition:transform .5s ease-in-out;
+}
+
+.cardReact-anime:hover img {
+  filter: hue-rotate(90deg);
+}
+
+.cardReact-anime {
+  animation: append-animate .2s ease-in;
+}
+
+@keyframes append-animate {
+	from {
+		transform: scale(0);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1);
+		opacity: 1;	
+	}
 }
 
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.containers-all-cards {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.containers-choosed-cards {
+  background: rgba(101, 94, 141, 0.6);
 }

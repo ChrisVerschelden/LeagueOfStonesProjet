@@ -17,16 +17,17 @@ const FormConnexion = () => {
             },
             body: JSON.stringify({"name" :userName, "password" : password})
         }).then(response => {
-            if (response.status !== 200) {
+            if (response.status === 200) {
+                console.log(response.json.token)
                 document.location.href = '/successplusplus'
-            }else if (response.status === 200) {
+            }else if (response.status !== 200) {
                 document.location.href = '/';
             }
         })
     }
 
     return (
-        <div className='container-fluid'>
+        <div className='container-fluid vh-100'>
           <div className="d-flex justify-content-center">
             <form onSubmit={handleSubmit} className="col col-md-6">
                 <div className="form-group">

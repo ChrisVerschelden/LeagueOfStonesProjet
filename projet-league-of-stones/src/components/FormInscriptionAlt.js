@@ -37,7 +37,7 @@ const FormInscriptionAlt = () => {
     }
 
     return (
-        <div className='container-fluid'>
+        <div className='container-fluid vh-100'>
             <div className="d-flex justify-content-center">
                 <form onSubmit={handleSubmit} className="col col-md-6">
                     <div className="form-group">
