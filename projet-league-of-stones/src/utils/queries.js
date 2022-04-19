@@ -1,15 +1,16 @@
-export const isAttacking = (idMine, idAdv) => {
-    fetch('http://localhost:3001/match/attack?card='+idMine+"&enemyCard="+idAdv, {
+/* Pre game queries
+
+ */
+const initDeck = (jsonDeck) => {
+    fetch('http://localhost:3001/match/initDeck?deck='+jsonDeck, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
     }).then(response => {return response})
         .then(data => {
-
             console.log(data)
             return data
-
         })
 }
 
@@ -38,6 +39,9 @@ const getAllMatchInfo = () => {
             return data
         })
 }
+/* Game queries
+
+ */
 
 const playCard = (idCard) => {
     fetch('http://localhost:3001/match/playCard?card='+idCard, {
@@ -65,18 +69,21 @@ const pickCard = () => {
         })
 }
 
-const initDeck = (jsonDeck) => {
-    fetch('http://localhost:3001/match/initDeck?deck='+jsonDeck, {
+export const attackEnemyCard = (idMine, idAdv) => {
+    fetch('http://localhost:3001/match/attack?card='+idMine+"&enemyCard="+idAdv, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
     }).then(response => {return response})
         .then(data => {
+
             console.log(data)
             return data
+
         })
 }
+
 
 const attackPlayer = () => {
     fetch('http://localhost:3001/match/attackPlayer', {
@@ -106,6 +113,49 @@ const endTurn = () => {
 
 const finishMatch = () => {
     fetch('http://localhost:3001/match/finishMatch', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then(response => {return response})
+        .then(data => {
+            console.log(data)
+            return data
+        })
+}
+
+
+/* Matchmaking queries
+
+ */
+const unparticipate = () => {
+    fetch('http://localhost:3001/matchmaking/unparticipate', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then(response => {return response})
+        .then(data => {
+            console.log(data)
+            return data
+        })
+}
+
+const requestPlayer = (idPlayer) => {
+    fetch('http://localhost:3001/matchmaking/request?matchmakingId='+idPlayer, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then(response => {return response})
+        .then(data => {
+            console.log(data)
+            return data
+        })
+}
+
+const acceptRequest = (idPlayer) => {
+    fetch('http://localhost:3001/matchmaking/acceptRequest?matchmakingId='+idPlayer, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
