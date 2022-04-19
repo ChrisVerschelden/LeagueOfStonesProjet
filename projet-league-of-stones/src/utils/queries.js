@@ -26,8 +26,86 @@ const getMatchInfo = () => {
         })
 }
 
+const getAllMatchInfo = () => {
+    fetch('http://localhost:3001/match/getAllMatch', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then(response => {return response})
+        .then(data => {
+            console.log(data)
+            return data
+        })
+}
+
 const playCard = (idCard) => {
     fetch('http://localhost:3001/match/playCard?card='+idCard, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then(response => {return response})
+        .then(data => {
+            console.log(data)
+            return data
+        })
+}
+
+const pickCard = () => {
+    fetch('http://localhost:3001/match/pickCard', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then(response => {return response})
+        .then(data => {
+            console.log(data)
+            return data
+        })
+}
+
+const initDeck = (jsonDeck) => {
+    fetch('http://localhost:3001/match/initDeck?deck='+jsonDeck, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then(response => {return response})
+        .then(data => {
+            console.log(data)
+            return data
+        })
+}
+
+const attackPlayer = () => {
+    fetch('http://localhost:3001/match/attackPlayer', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then(response => {return response})
+        .then(data => {
+            console.log(data)
+            return data
+        })
+}
+
+const endTurn = () => {
+    fetch('http://localhost:3001/match/endTurn', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then(response => {return response})
+        .then(data => {
+            console.log(data)
+            return data
+        })
+}
+
+const finishMatch = () => {
+    fetch('http://localhost:3001/match/finishMatch', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
