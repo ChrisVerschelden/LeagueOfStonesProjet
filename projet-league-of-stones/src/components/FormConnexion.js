@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { useCookies } from 'react-cookie';
+
+import { connect } from '../utils/queries.js';
 
 const FormConnexion = () => {
 
@@ -8,28 +10,38 @@ const FormConnexion = () => {
 
     const [pristine_email, pristine_setemail] = useState(true);
     const [pristine_password, pristine_setPassword] = useState(true);
+    
+    const [cookies, setCookie] = useCookies(['name']);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
         event.stopPropagation()
-        fetch('http://localhost:3001/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({"email" :email, "password" : password})
-        }).then(response => {return response})
-        .then(data => {
-            const status = data.status
-            data = data.json()
-            if (status === 200) {
-                alert(data.token)
-                document.location.href = '/successplusplus'
-            } else {
-                alert(data.error)
+        
+        const response = await connect(email, password);
+        if (response) {
+            if ("status" in response) {
+                switch (response.status) {
+                    case 200:
+                        const data = await response.json();
+                        if (data) {
+                            if ("token" in data) {
+                                let expiration = new Date();
+                                expiration.setHours(expiration.getHours() + 8);
+                                console.log("setting session cookie");
+                                console.log(expiration);
+                                setCookie("session", data.token, {
+                                    expires: expiration
+                                });
+                                document.location.href = '/successplusplus'
+                            }
+                        }
+                        break;
+                
+                    default:
+                        break;
+                }
             }
-            
-        })
+        }
     }
 
     return (

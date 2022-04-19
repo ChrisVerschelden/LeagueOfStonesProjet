@@ -5,6 +5,7 @@ import FormConnexion from './components/FormConnexion'
 import FormInscriptionAlt from './components/FormInscriptionAlt';
 import Interface from './components/Interface'
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { MatchmakingSelection } from './components/Prematch/Matchmaking/MatchmakingSelection';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path='/composeDeck' element={<Interface />}/>
           <Route path='/findGame'    element={<p></p>}/>
           <Route path='/game'        element={<p></p>}/>
+          <Route path='/prematch/matchmaking'        element={ <MatchmakingSelection /> } />
         </Routes>
       </Router>
     </div>
