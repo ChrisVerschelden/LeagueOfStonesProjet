@@ -20,9 +20,11 @@ const FormInscriptionAlt = () => {
         pristine_setEmail(true);pristine_setPassword(true); pristine_setPasswordConf(true);pristine_setUserName(true)
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
         fetch('http://localhost:3001/user', {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },

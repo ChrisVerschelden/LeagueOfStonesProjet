@@ -3,26 +3,32 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const FormConnexion = () => {
 
-    const [userName, setUserName] = useState('');
+    const [email, setemail] = useState('');
     const [password, setPassword] = useState('');
 
-    const [pristine_userName, pristine_setUserName] = useState(true);
+    const [pristine_email, pristine_setemail] = useState(true);
     const [pristine_password, pristine_setPassword] = useState(true);
 
-    const handleSubmit = () => {
-        fetch('http://localhost:3001/user', {
-            method: 'PUT',
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        fetch('http://localhost:3001/login', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({"name" :userName, "password" : password})
-        }).then(response => {
-            if (response.status === 200) {
-                console.log(response.json.token)
+            body: JSON.stringify({"email" :email, "password" : password})
+        }).then(response => {return response})
+        .then(data => {
+            const status = data.status
+            data = data.json()
+            if (status === 200) {
+                alert(data.token)
                 document.location.href = '/successplusplus'
-            }else if (response.status !== 200) {
-                document.location.href = '/';
+            } else {
+                alert(data.error)
             }
+            
         })
     }
 
@@ -31,9 +37,9 @@ const FormConnexion = () => {
           <div className="d-flex justify-content-center">
             <form onSubmit={handleSubmit} className="col col-md-6">
                 <div className="form-group">
-                    <label >Pseudo</label>
-                    <input onChange={e => setUserName(e.target.value)} onBlur={() => pristine_setUserName(false)} type="text" className="form-control" id="username" aria-describedby="pseudoHelp" placeholder="your pseudo here" value={userName}></input>
-                    <span>{userName === "" && !pristine_userName ? <span className='text-danger'>can't be empty !</span> : ""}</span>
+                    <label >Email</label>
+                    <input onChange={e => setemail(e.target.value)} onBlur={() => pristine_setemail(false)} type="text" className="form-control" id="email" aria-describedby="emailHelp" placeholder="your email here" value={email}></input>
+                    <span>{email === "" && !pristine_email ? <span className='text-danger'>can't be empty !</span> : ""}</span>
                 </div>
                 <div className="form-group">
                     <label >Password</label>
