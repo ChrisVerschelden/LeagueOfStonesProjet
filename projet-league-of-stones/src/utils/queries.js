@@ -1,4 +1,22 @@
-/* Pre game queries
+/*
+Connection queries
+ */
+
+const currentConnectedUser = () => {
+    fetch('http://localhost:3001/users/amIConnected', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }).then(response => {return response})
+        .then(data => {
+            console.log(data)
+            return data
+        })
+}
+
+
+/*  game queries
 
  */
 const initDeck = (jsonDeck) => {
@@ -39,7 +57,7 @@ const getAllMatchInfo = () => {
             return data
         })
 }
-/* Game queries
+/* Combat queries
 
  */
 
