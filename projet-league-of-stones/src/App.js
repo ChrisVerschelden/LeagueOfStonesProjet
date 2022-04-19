@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import FormConnexion from './components/FormConnexion'
 import FormInscriptionAlt from './components/FormInscriptionAlt';
 import Interface from './components/Interface'
+import Plateau from './components/plateau/Plateau';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
           <Route path='/success'     element={<h1>Votre compte à bien été créé !</h1>}/>
           <Route path='/composeDeck' element={<Interface />}/>
           <Route path='/findGame'    element={<p></p>}/>
-          <Route path='/game'        element={<p></p>}/>
+          <Route path='/game'        element={<Plateau/>}/>
         </Routes>
       </Router>
     </div>
