@@ -11,7 +11,7 @@ export const AvailablePlayers = (props) => {
             const liList = []
             for (const [index, player] of players.entries()) {
                 if ("email" in player && "name" in player && "matchmakingId" in player) {
-                    liList.push(<li key={index} className="list-group-item"><span>{player.name} ({player.email})</span></li>);
+                    liList.push(<li key={index} className="list-group-item d-flex justify-content-between align-items-center"><span className="flex-grow-1">{player.name} ({player.email})</span><button className="btn btn-primary">Défier</button></li>);
                 }
             }
             setPlayersUl(<ul className="list-group list-group-flush w-50 border border-warning rounded p-0">{liList}</ul>);

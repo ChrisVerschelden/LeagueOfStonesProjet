@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 
-import { getMatchmakingAvailablePlayers } from '../../../utils/queries';
+import { getMatchmakingAvailablePlayers, participateMatchMaking, unparticipateMatchMaking } from '../../../utils/queries';
 
 import { AvailablePlayers } from './AvailablePlayers/AvailablePlayers';
 import { MatchRequests } from './MatchRequests/MatchRequests';
@@ -42,13 +42,45 @@ const DEBUG = {
 }
 
 export const MatchmakingSelection = (props) => {
-    const [availablePlayers, setavailablePlayers] = useState([]);
+    const [availablePlayers, setAvailablePlayers] = useState([]);
     const [isParticipating, setIsParticipating] = useState(false);
 
     const [cookies, setCookie] = useCookies(['name']);
 
-    const handleParticipating = useCallback((doParticipate) => {
-        setIsParticipating(doParticipate);
+    const handleParticipating = useCallback(async (doParticipate) => {
+        if (doParticipate) {
+            const response = await participateMatchMaking(cookies.session);
+            if (response) {
+                if ("status" in response) {
+                    switch (response.status) {
+                        case 200:
+                            console.log("Now participating");
+                            setIsParticipating(doParticipate);
+                            break;
+                    
+                        default:
+                            console.log(`not 200, response: ${await response.text()}`);
+                            break;
+                    }
+                }
+            }
+        } else {
+            const response = await unparticipateMatchMaking(cookies.session);
+            if (response) {
+                if ("status" in response) {
+                    switch (response.status) {
+                        case 200:
+                            console.log("Not participating anymore");
+                            setIsParticipating(doParticipate);
+                            break;
+                    
+                        default:
+                            console.log(`not 200, response: ${await response.text()}`);
+                            break;
+                    }
+                }
+            }
+        }
     }, [setIsParticipating]);
 
     const setupAvailablePlayers = useCallback(async () => {
@@ -58,7 +90,8 @@ export const MatchmakingSelection = (props) => {
                 if ("status" in response) {
                     switch (response.status) {
                         case 200:
-                            console.log(await response.json());
+                            const data = await response.json();
+                            if (Array.isArray(data)) setAvailablePlayers(data);
                             break;
                     
                         default:
@@ -76,7 +109,7 @@ export const MatchmakingSelection = (props) => {
         <div className="container py-2">
             <h1>Matchmaking</h1>
             <div className="container">
-                <AvailablePlayers players={DEBUG.PLAYERS} />
+                <AvailablePlayers players={availablePlayers} />
                 <MatchRequests players={DEBUG.REQUESTS} isParticipating={isParticipating} handleParticipating={handleParticipating} />
             </div>
         </div>

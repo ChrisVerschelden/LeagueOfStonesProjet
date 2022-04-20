@@ -27,9 +27,8 @@ const FormConnexion = () => {
                             if ("token" in data) {
                                 let expiration = new Date();
                                 expiration.setHours(expiration.getHours() + 8);
-                                console.log("setting session cookie");
-                                console.log(expiration);
                                 setCookie("session", data.token, {
+                                    path: '/',
                                     expires: expiration
                                 });
                                 document.location.href = '/successplusplus'

@@ -33,7 +33,7 @@ const FormInscriptionAlt = () => {
                         const data = await response.json();
                         if (data) {
                             if ("id" in data) {
-                                document.location.href = '/connexion'
+                                document.location.href = '/login'
                             }
                         }
                         break;

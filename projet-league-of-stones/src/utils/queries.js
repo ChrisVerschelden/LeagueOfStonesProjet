@@ -1,18 +1,6 @@
 
 const API_URL = `http://localhost:3001`;
 
-export const getMatchmakingAvailablePlayers = async (session) => {
-
-  const response = await fetch(`${API_URL}/matchmaking/getAll`, {
-    method: "GET",
-    headers: {
-      'Content-Type': 'application/json',
-      "www-authenticate": session
-    }
-  });
-  return response;
-};
-
 export const connect = async (email, password) => {
 
   const response = await fetch(`${API_URL}/login`, {
@@ -41,16 +29,17 @@ export const register = async (name, email, password) => {
 Connection queries
  */
 
-const currentConnectedUser = () => {
-    fetch(`${API_URL}/users/amIConnected`, {
+export const currentConnectedUser = async (session) => {
+    console.log("currentConnectedUser");
+    console.log(session);
+    const response = await fetch(`${API_URL}/users/amIConnected`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-            return data;
-        })
+            'Content-Type': 'application/json',
+            'www-authenticate': session
+        }
+    });
+    return response;
 };
 
 
@@ -71,7 +60,7 @@ const initDeck = (jsonDeck) => {
 }
 
 const getMatchInfo = () => {
-    fetch('${API_URL}/match/getMatch', {
+    fetch(`${API_URL}/match/getMatch`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -84,7 +73,7 @@ const getMatchInfo = () => {
 }
 
 const getAllMatchInfo = () => {
-    fetch('${API_URL}/match/getAllMatch', {
+    fetch(`${API_URL}/match/getAllMatch`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -100,7 +89,7 @@ const getAllMatchInfo = () => {
  */
 
 const playCard = (idCard) => {
-    fetch('${API_URL}/match/playCard?card='+idCard, {
+    fetch(`${API_URL}/match/playCard?card=`+idCard, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -113,7 +102,7 @@ const playCard = (idCard) => {
 }
 
 const pickCard = () => {
-    fetch('${API_URL}/match/pickCard', {
+    fetch(`${API_URL}/match/pickCard`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -126,7 +115,7 @@ const pickCard = () => {
 }
 
 export const attackEnemyCard = (idMine, idAdv) => {
-    fetch('${API_URL}/match/attack?card='+idMine+"&enemyCard="+idAdv, {
+    fetch(`${API_URL}/match/attack?card=`+idMine+"&enemyCard="+idAdv, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -142,7 +131,7 @@ export const attackEnemyCard = (idMine, idAdv) => {
 
 
 const attackPlayer = () => {
-    fetch('${API_URL}/match/attackPlayer', {
+    fetch(`${API_URL}/match/attackPlayer`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -155,7 +144,7 @@ const attackPlayer = () => {
 }
 
 const endTurn = () => {
-    fetch('${API_URL}/match/endTurn', {
+    fetch(`${API_URL}/match/endTurn`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -168,7 +157,7 @@ const endTurn = () => {
 }
 
 const finishMatch = () => {
-    fetch('${API_URL}/match/finishMatch', {
+    fetch(`${API_URL}/match/finishMatch`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -184,21 +173,45 @@ const finishMatch = () => {
 /* Matchmaking queries
 
  */
-const unparticipate = () => {
-    fetch('${API_URL}/matchmaking/unparticipate', {
+
+export const getMatchmakingAvailablePlayers = async (session) => {
+
+  const response = await fetch(`${API_URL}/matchmaking/getAll`, {
+    method: "GET",
+    headers: {
+      'Content-Type': 'application/json',
+      "www-authenticate": session
+    }
+  });
+  return response;
+};
+
+export const participateMatchMaking = async (session) => {
+
+  const response = await fetch(`${API_URL}/matchmaking/participate`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        "www-authenticate": session
+    }
+  });
+  return response;     
+};
+
+export const unparticipateMatchMaking = async (session) => {
+
+    const response = await fetch(`${API_URL}/matchmaking/unparticipate`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-            console.log(data)
-            return data
-        })
+            'Content-Type': 'application/json',
+            "www-authenticate": session
+        }
+    });
+    return response;     
 }
 
 const requestPlayer = (idPlayer) => {
-    fetch('${API_URL}/matchmaking/request?matchmakingId='+idPlayer, {
+    fetch(`${API_URL}/matchmaking/request?matchmakingId=`+idPlayer, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -211,7 +224,7 @@ const requestPlayer = (idPlayer) => {
 }
 
 const acceptRequest = (idPlayer) => {
-    fetch('${API_URL}/matchmaking/acceptRequest?matchmakingId='+idPlayer, {
+    fetch(`${API_URL}/matchmaking/acceptRequest?matchmakingId=`+idPlayer, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
