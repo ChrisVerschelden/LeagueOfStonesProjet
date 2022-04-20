@@ -2,6 +2,9 @@ import React from "react";
 import ChoosedCardList from "./ChoosedCardList";
 import AllCardList from "./AllCardList" 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {stringifyDeck} from "../utils/osef";
+import {initDeck} from "../utils/queries";
+
 class Interface extends React.Component {
     constructor(props) {
         super(props);
@@ -45,7 +48,7 @@ class Interface extends React.Component {
         Object.keys(this.state.choosedCardList).map(key => {
             output += this.state.choosedCardList[key].name + "\n"
         })
-        console.log(output)
+        initDeck(stringifyDeck(this.state.choosedCardList))
     }
 
     render() {

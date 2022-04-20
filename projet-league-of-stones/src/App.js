@@ -15,7 +15,7 @@ function App() {
                     <a className="navbar-brand" href="#">League Of Stone</a>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
+                        <span className="navbar-toggler-icon"/>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav">
@@ -33,7 +33,7 @@ function App() {
                     <Route path='/connexion' element={<FormConnexion/>}/>
                     <Route path='/success' element={<h1>Votre compte à bien été créé !</h1>}/>
                     <Route path='/composeDeck' element={<Interface/>}/>
-                    <Route path='/findGame' element={<p></p>}/>
+                    <Route path='/findGame' element={<p/>}/>
                     <Route path='/game' element={<Plateau/>}/>
                 </Routes>
             </Router>
