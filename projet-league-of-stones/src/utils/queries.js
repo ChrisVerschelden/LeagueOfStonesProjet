@@ -2,7 +2,7 @@
 Connection queries
  */
 
-const currentConnectedUser = () => {
+export const currentConnectedUser = () => {
     fetch('http://localhost:3001/users/amIConnected', {
         method: 'GET',
         headers: {
@@ -19,7 +19,7 @@ const currentConnectedUser = () => {
 /*  game queries
 
  */
-const initDeck = (jsonDeck) => {
+export const initDeck = (jsonDeck) => {
     fetch('http://localhost:3001/match/initDeck?deck='+jsonDeck, {
         method: 'GET',
         headers: {
@@ -32,7 +32,7 @@ const initDeck = (jsonDeck) => {
         })
 }
 
-const getMatchInfo = () => {
+export const getMatchInfo = () => {
     fetch('http://localhost:3001/match/getMatch', {
         method: 'GET',
         headers: {
@@ -45,7 +45,7 @@ const getMatchInfo = () => {
         })
 }
 
-const getAllMatchInfo = () => {
+export const getAllMatchInfo = () => {
     fetch('http://localhost:3001/match/getAllMatch', {
         method: 'GET',
         headers: {
@@ -61,7 +61,7 @@ const getAllMatchInfo = () => {
 
  */
 
-const playCard = (idCard) => {
+export const playCard = (idCard) => {
     fetch('http://localhost:3001/match/playCard?card='+idCard, {
         method: 'GET',
         headers: {
@@ -74,7 +74,7 @@ const playCard = (idCard) => {
         })
 }
 
-const pickCard = () => {
+export const pickCard = () => {
     fetch('http://localhost:3001/match/pickCard', {
         method: 'GET',
         headers: {
@@ -103,7 +103,7 @@ export const attackEnemyCard = (idMine, idAdv) => {
 }
 
 
-const attackPlayer = () => {
+export const attackPlayer = () => {
     fetch('http://localhost:3001/match/attackPlayer', {
         method: 'GET',
         headers: {
@@ -116,7 +116,7 @@ const attackPlayer = () => {
         })
 }
 
-const endTurn = () => {
+export const endTurn = () => {
     fetch('http://localhost:3001/match/endTurn', {
         method: 'GET',
         headers: {
@@ -129,7 +129,7 @@ const endTurn = () => {
         })
 }
 
-const finishMatch = () => {
+export const finishMatch = () => {
     fetch('http://localhost:3001/match/finishMatch', {
         method: 'GET',
         headers: {
@@ -146,7 +146,7 @@ const finishMatch = () => {
 /* Matchmaking queries
 
  */
-const unparticipate = () => {
+export const unparticipate = () => {
     fetch('http://localhost:3001/matchmaking/unparticipate', {
         method: 'GET',
         headers: {
@@ -159,7 +159,7 @@ const unparticipate = () => {
         })
 }
 
-const requestPlayer = (idPlayer) => {
+export const requestPlayer = (idPlayer) => {
     fetch('http://localhost:3001/matchmaking/request?matchmakingId='+idPlayer, {
         method: 'GET',
         headers: {
@@ -172,7 +172,7 @@ const requestPlayer = (idPlayer) => {
         })
 }
 
-const acceptRequest = (idPlayer) => {
+export const acceptRequest = (idPlayer) => {
     fetch('http://localhost:3001/matchmaking/acceptRequest?matchmakingId='+idPlayer, {
         method: 'GET',
         headers: {
