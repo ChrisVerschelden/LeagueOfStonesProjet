@@ -8,7 +8,7 @@ const PlateauDeck = (props) => {
             return <div key={key} onClick={() => { 
                         props.clickHandler({selected: true, card:props.deck[key]})
                     }
-                } className="col-2 cardReact-anime card-game"> <CardReact data={props.deck[key]} /> </div>
+                } className="col-3 cardReact-anime card-game"> <CardReact data={props.deck[key]} /> </div>
             })
     );
 }

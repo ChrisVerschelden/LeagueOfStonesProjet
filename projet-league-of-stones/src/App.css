@@ -14,9 +14,17 @@ body::-webkit-scrollbar-thumb {
 
 .cardReact:hover {
   z-index: 10;
-  transform: scale(1.15);
+  transform: scale(1.05);
   transform-origin: top-left;
   transition:transform .5s ease-in-out;
+}
+
+.hand {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.card-cover {
+  object-fit: fill;
 }
 
 .cardReact:hover img {
@@ -38,12 +46,14 @@ body::-webkit-scrollbar-thumb {
 }
 
 .battleGround {
-  background-image: url(./ressources/battleGround.jpg);
+  background-image: url(https://wallup.net/wp-content/uploads/2018/10/03/964169-dota-fantasy-mmo-online-battle-arena-action-fighting-warrior.jpg);
+  z-index: -1;
   width:100vw; height:92vh;
-  -webkit-background-size: contain;
-  -moz-background-size: contain;
-  -o-background-size: contain;
-  background-size: contain;
+  padding-top: -30vh;
+  -webkit-background-size: fit;
+  -moz-background-size: fit;
+  -o-background-size: fit;
+  background-size: fit;
 }
 
 @keyframes append-animate {
@@ -68,4 +78,30 @@ body::-webkit-scrollbar-thumb {
 .containers-choosed-cards {
   background: rgba(101, 94, 141, 0.6);
 }
+
+.player {
+  position: fixed;
+  z-index: 500;
+  width: 100px;
+  height: 125px;
+  margin-top:0;
+  left: 0;
+  margin-left: 20px;
+  transition: margin-left 1s;
+}
+
+.player-before {
+  margin-left: -200vh;
+}
+
+.player.player-1 {
+  top: 0;
+  margin-top: 100px;
+}
+
+.player.player-2 {
+  bottom: 0;
+  margin-bottom: 100px;
+}
+
 

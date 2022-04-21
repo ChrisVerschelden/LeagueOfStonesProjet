@@ -49,6 +49,7 @@ class Interface extends React.Component {
             output += this.state.choosedCardList[key].name + "\n"
         })
         initDeck(stringifyDeck(this.state.choosedCardList))
+        document.location.href = '/game'
     }
 
     render() {
