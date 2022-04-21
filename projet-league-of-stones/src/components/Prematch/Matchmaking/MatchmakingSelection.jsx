@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 import { getMatchmakingAvailablePlayers, participateMatchMaking, unparticipateMatchMaking } from '../../../utils/queries';
 
@@ -41,9 +42,15 @@ const DEBUG = {
     ]
 }
 
+const INTERVAL_REPEAT = 5 * 1000;
+
 export const MatchmakingSelection = (props) => {
+    const navigate = useNavigate();
+
     const [availablePlayers, setAvailablePlayers] = useState([]);
-    const [isParticipating, setIsParticipating] = useState(false);
+    const [receivedRequests, setReceivedRequests] = useState([]);
+    const [isParticipating, setIsParticipating] = useState(true);
+    const [updateCheckValue, setUpdateCheckValue] = useState(1);
 
     const [cookies, setCookie] = useCookies(['name']);
 
@@ -54,6 +61,8 @@ export const MatchmakingSelection = (props) => {
                 if ("status" in response) {
                     switch (response.status) {
                         case 200:
+                            console.log("response");
+                            console.log(await response.json());
                             console.log("Now participating");
                             setIsParticipating(doParticipate);
                             break;
@@ -70,8 +79,9 @@ export const MatchmakingSelection = (props) => {
                 if ("status" in response) {
                     switch (response.status) {
                         case 200:
-                            console.log("Not participating anymore");
+                            console.log("Not participating anymore", doParticipate);
                             setIsParticipating(doParticipate);
+                            setAvailablePlayers([]);
                             break;
                     
                         default:
@@ -84,6 +94,7 @@ export const MatchmakingSelection = (props) => {
     }, [setIsParticipating]);
 
     const setupAvailablePlayers = useCallback(async () => {
+        console.log("setupAvailablePlayers");
         if ("session" in cookies) {
             const response = await getMatchmakingAvailablePlayers(cookies.session);
             if (response) {
@@ -103,14 +114,81 @@ export const MatchmakingSelection = (props) => {
         }
     }, []);
 
-    useEffect(() => { setupAvailablePlayers() }, [])
+    const setupRequests = useCallback( async () => {
+        if (cookies && "session" in cookies) {
+            const response = await participateMatchMaking(cookies.session);
+            if (response) {
+                if ("status" in response) {
+                    switch (response.status) {
+                        case 200:
+                            const data = await response.json();
+                            if ("request" in data) {
+                                setReceivedRequests(data.request);
+                            }
+                            console.log("data");
+                            console.log(data);
+                            break;
+                    
+                        default:
+                            console.error(`not 200, response: ${await response.text()}`);
+                            break;
+                    }
+                }
+            }
+        }
+    }, []);
+    
+    const checkForMatch = useCallback( async () => {
+        if (cookies && "session" in cookies) {
+            const response = await participateMatchMaking(cookies.session);
+            if (response) {
+                if ("status" in response) {
+                    switch (response.status) {
+                        case 200:
+                            console.log("response");
+                            try {
+                                const data = await response.json();
+                                if ("match" in data) {
+                                    navigate('/composeDeck');
+                                }
+                            } catch (err) { console.error(err); }
+                            console.log(await response.json());
+                            break;
+                    
+                        default:
+                            console.log(`not 200, response: ${await response.text()}`);
+                            break;
+                    }
+                }
+            }
+        }
+    }, [cookies]);
+
+    const updatePlayers = useCallback(() => {
+        if (isParticipating) {
+            setupAvailablePlayers();
+            setupRequests();
+            checkForMatch();
+        }
+    }, [isParticipating, setupAvailablePlayers, setupRequests]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            console.log('Logs every minute');
+            updatePlayers();
+            console.log(isParticipating);
+        }, INTERVAL_REPEAT);
+        return () => clearInterval(interval);
+    }, [isParticipating])
+
+    useEffect(() => { updatePlayers(); }, [])
 
     return (
         <div className="container py-2">
             <h1>Matchmaking</h1>
             <div className="container">
                 <AvailablePlayers players={availablePlayers} />
-                <MatchRequests players={DEBUG.REQUESTS} isParticipating={isParticipating} handleParticipating={handleParticipating} />
+                <MatchRequests players={receivedRequests} isParticipating={isParticipating} handleParticipating={handleParticipating} />
             </div>
         </div>
     );

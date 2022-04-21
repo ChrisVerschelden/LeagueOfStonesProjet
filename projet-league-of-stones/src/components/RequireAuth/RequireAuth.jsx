@@ -11,6 +11,8 @@ export const RequireAuth = ({ children }: { children: JSX.Element }) => {
   let auth = false;
   if ("session" in cookies) {
     auth = isAuth(cookies.session);
+    console.log("auth?");
+    console.log("auth");
   }
 
   if (!auth) {

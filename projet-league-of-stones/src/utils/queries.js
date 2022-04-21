@@ -144,12 +144,20 @@ export const unparticipateMatchMaking = async (session) => {
     return response;     
 }
 
-export const requestPlayer = async (idPlayer) => {
-    let data = await fetch(`${API_URL}/matchmaking/request?matchmakingId=` + idPlayer);
-    return await data.json()
+export const requestPlayer = async (session, idPlayer) => {
+    let response = await fetch(`${API_URL}/matchmaking/request?matchmakingId=` + idPlayer, {
+        headers: {
+            'www-authenticate': session
+        }
+    });
+    return response;
 }
 
-export const acceptRequest = async (idPlayer) => {
-    let data = await fetch(`${API_URL}/matchmaking/acceptRequest?matchmakingId=` + idPlayer)
-    return await data.json()
+export const acceptRequest = async (session, idPlayer) => {
+    let response = await fetch(`${API_URL}/matchmaking/acceptRequest?matchmakingId=` + idPlayer, {
+        headers: {
+            'www-authenticate': session
+        }
+    });
+    return response;
 }
