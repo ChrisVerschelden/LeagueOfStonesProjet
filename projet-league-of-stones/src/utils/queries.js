@@ -44,127 +44,63 @@ export const currentConnectedUser = async (session) => {
 /*  game queries
 
  */
-const initDeck = (jsonDeck) => {
+export const initDeck = (jsonDeck) => {
     fetch(`${API_URL}/match/initDeck?deck=`+jsonDeck, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
-    }).then(response => {return response})
+    }).then(response => {
+        return response
+    })
         .then(data => {
             console.log(data)
             return data
         })
 }
 
-const getMatchInfo = () => {
-    fetch(`${API_URL}/match/getMatch`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-            console.log(data)
-            return data
-        })
+export const getMatchInfo = async () => {
+    let data = await fetch(`${API_URL}/match/getMatch`);
+    return await data.json()
 }
 
-const getAllMatchInfo = () => {
-    fetch(`${API_URL}/match/getAllMatch`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-            console.log(data)
-            return data
-        })
+export const getAllMatchInfo = async () => {
+    let data = await fetch(`${API_URL}/match/getAllMatch`);
+    return await data.json()
 }
 /* Combat queries
 
  */
 
-const playCard = (idCard) => {
-    fetch(`${API_URL}/match/playCard?card=`+idCard, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-            console.log(data)
-            return data
-        })
+export const playCard = async (idCard) => {
+    let data = await fetch(`${API_URL}/match/playCard?card=` + idCard);
+    return await data.json()
 }
 
-const pickCard = () => {
-    fetch(`${API_URL}/match/pickCard`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-            console.log(data)
-            return data
-        })
+export const pickCard = async () => {
+    let data = await fetch(`${API_URL}/match/pickCard`);
+    return await data.json()
 }
 
-export const attackEnemyCard = (idMine, idAdv) => {
-    fetch(`${API_URL}/match/attack?card=`+idMine+"&enemyCard="+idAdv, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-
-            console.log(data)
-            return data
-
-        })
+export const attackEnemyCard = async (idMine, idAdv) => {
+    let data = await fetch(`${API_URL}/match/attack?card=` + {idMine} + "&enemyCard=" + {idAdv});
+    return await data.json()
 }
 
 
-const attackPlayer = () => {
-    fetch(`${API_URL}/match/attackPlayer`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-            console.log(data)
-            return data
-        })
+export const attackPlayer = async () => {
+    let data = await fetch(`${API_URL}/match/attackPlayer`);
+    return await data.json()
 }
 
-const endTurn = () => {
-    fetch(`${API_URL}/match/endTurn`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-            console.log(data)
-            return data
-        })
+export const endTurn = async () => {
+    let data = await fetch(`${API_URL}/match/endTurn`)
+    return await data.json()
 }
 
-const finishMatch = () => {
-    fetch(`${API_URL}/match/finishMatch`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-            console.log(data)
-            return data
-        })
+export const finishMatch = async () => {
+    let data = fetch(`${API_URL}/match/finishMatch`)
+    return await data.json()
 }
 
 
@@ -208,28 +144,12 @@ export const unparticipateMatchMaking = async (session) => {
     return response;     
 }
 
-const requestPlayer = (idPlayer) => {
-    fetch(`${API_URL}/matchmaking/request?matchmakingId=`+idPlayer, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-            console.log(data)
-            return data
-        })
+export const requestPlayer = async (idPlayer) => {
+    let data = await fetch(`${API_URL}/matchmaking/request?matchmakingId=` + idPlayer);
+    return await data.json()
 }
 
-const acceptRequest = (idPlayer) => {
-    fetch(`${API_URL}/matchmaking/acceptRequest?matchmakingId=`+idPlayer, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {return response})
-        .then(data => {
-            console.log(data)
-            return data
-        })
+export const acceptRequest = async (idPlayer) => {
+    let data = await fetch(`${API_URL}/matchmaking/acceptRequest?matchmakingId=` + idPlayer)
+    return await data.json()
 }
