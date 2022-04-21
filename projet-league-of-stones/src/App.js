@@ -4,8 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import FormConnexion from './components/FormConnexion'
 import FormInscriptionAlt from './components/FormInscriptionAlt';
 import Interface from './components/Interface'
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import MatchMaking from './components/MatchMaking';
 import Plateau from './components/plateau/Plateau';
-import {BrowserRouter as Router, Route, Link, Routes} from 'react-router-dom';
 
 function App() {
     return (
@@ -35,6 +36,8 @@ function App() {
                     <Route path='/composeDeck' element={<Interface/>}/>
                     <Route path='/findGame' element={<p/>}/>
                     <Route path='/game' element={<Plateau/>}/>
+                    <Route path='/matchmaking' element={<MatchMaking />}/>
+
                 </Routes>
             </Router>
         </div>

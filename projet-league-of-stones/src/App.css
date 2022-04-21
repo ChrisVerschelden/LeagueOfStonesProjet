@@ -57,3 +57,37 @@ body::-webkit-scrollbar-thumb {
   background: rgba(101, 94, 141, 0.6);
 }
 
+.l {
+  box-shadow: 0 4px 8px 0 rgb(221, 217, 217), 0 6px 20px 0 rgb(221, 217, 217);
+}
+
+
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+.table-fixed tbody {
+  height: 300px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tr,
+.table-fixed td,
+.table-fixed th {
+  display: block;
+}
+
+.table-fixed tbody td,
+.table-fixed tbody th,
+.table-fixed thead > tr > th {
+  float: left;
+  position: relative;
+}
+
+
