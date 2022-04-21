@@ -15,7 +15,6 @@ body::-webkit-scrollbar-thumb {
 .cardReact:hover {
   z-index: 10;
   transform: scale(1.05);
-  transform-origin: top-left;
   transition:transform .5s ease-in-out;
 }
 
@@ -50,10 +49,7 @@ body::-webkit-scrollbar-thumb {
   z-index: -1;
   width:100vw; height:92vh;
   padding-top: -30vh;
-  -webkit-background-size: fit;
-  -moz-background-size: fit;
-  -o-background-size: fit;
-  background-size: fit;
+
 }
 
 @keyframes append-animate {
@@ -79,7 +75,6 @@ body::-webkit-scrollbar-thumb {
   background: rgba(101, 94, 141, 0.6);
 }
 
-<<<<<<< HEAD
 .player {
   position: fixed;
   z-index: 500;
@@ -103,7 +98,8 @@ body::-webkit-scrollbar-thumb {
 .player.player-2 {
   bottom: 0;
   margin-bottom: 100px;
-=======
+}
+
 .l {
   box-shadow: 0 4px 8px 0 rgb(221, 217, 217), 0 6px 20px 0 rgb(221, 217, 217);
 }
@@ -135,7 +131,6 @@ body::-webkit-scrollbar-thumb {
 .table-fixed thead > tr > th {
   float: left;
   position: relative;
->>>>>>> cda5c63fde7585eede687d77e3124c88630c9b85
 }
 
 

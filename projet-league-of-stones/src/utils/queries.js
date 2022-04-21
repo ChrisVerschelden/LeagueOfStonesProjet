@@ -61,9 +61,14 @@ export const initDeck = (jsonDeck) => {
         })
 }
 
-export const getMatchInfo = async () => {
-    let data = await fetch(`${API_URL}/match/getMatch`);
-    return await data.json()
+export const getMatchInfo = async (session) => {
+    return await fetch(`${API_URL}/match/getMatch`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            "www-authenticate": session
+        }
+    });
 }
 
 export const getAllMatchInfo = async () => {

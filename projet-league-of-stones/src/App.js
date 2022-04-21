@@ -5,11 +5,11 @@ import FormConnexion from './components/FormConnexion'
 import FormInscriptionAlt from './components/FormInscriptionAlt';
 import Interface from './components/Interface'
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
-import { BrowserRouter as Router, Route, Link, Routes, Navigate } from 'react-router-dom';
 import { MatchmakingSelection } from './components/Prematch/Matchmaking/MatchmakingSelection';
 import { RequireAuth } from './components/RequireAuth/RequireAuth';
 import { HeaderComp } from './components/Header/HeaderComp';
 import { Logout } from './components/Logout';
+import Plateau from "./components/plateau/Plateau";
 
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
           <Route path='/success'     element={<h1>Votre compte à bien été créé !</h1>}/>
           <Route path='/composeDeck' element={<Interface />}/>
           <Route path='/findGame'    element={<p></p>}/>
-          <Route path='/game'        element={<p></p>}/>
+          <Route path='/game'        element={<Plateau/>}/>
           <Route path='/prematch/matchmaking' element={
                                                         <RequireAuth>
                                                           <MatchmakingSelection />

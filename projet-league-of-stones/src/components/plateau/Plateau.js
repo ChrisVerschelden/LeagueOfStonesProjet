@@ -2,48 +2,53 @@ import React, {useState, useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PlateauDeck from './PlateauDeck'
 import CardReact from "../CardReact";
-import { initDeck, getMatchInfo, attackEnemyCard  } from "../../utils/queries";
-import { stringifyDeck } from "../../utils/osef";
-
+import {initDeck, getMatchInfo, attackEnemyCard} from "../../utils/queries";
+import {stringifyDeck} from "../../utils/osef";
+import {useCookies} from "react-cookie";
+// {<PlateauDeck deck={board.player2.board} clickHandler={handleClickAdversary}/>}
 
 const Plateau = (props) => {
-
-    const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected:false, card: null})
-    const [selectedCardPlayer, setSelectedCardPlayer]       = useState({selected:false, card: null})
-    const [board, setBoard]                                 = useState({player1:{}, player2:{}})
+    const [cookies, setCookie] = useCookies(['name']);
+    const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected: false, card: null})
+    const [selectedCardPlayer, setSelectedCardPlayer] = useState({selected: false, card: null})
+    const [board, setBoard] = useState({player1: {}, player2: {}})
 
     const checkStateSelection = async () => {
         if (selectedCardAdversary.selected === true && selectedCardPlayer.selected === true) {
-            attackEnemyCard(selectedCardPlayer.card.key ,selectedCardAdversary.card.key)
+            attackEnemyCard(selectedCardPlayer.card.key, selectedCardAdversary.card.key)
             const result = await getMatchInfo()
             setBoard({player1: result.player1, player2: result.player2});
         }
     }
 
     const handleClickAdversary = (data) => {
-        setSelectedCardAdversary({selected:true, card:data});
+        setSelectedCardAdversary({selected: true, card: data});
         checkStateSelection();
     }
 
-    const handleClickPlayer    = (data) => {
-        setSelectedCardPlayer({selected:true, card:data});
+    const handleClickPlayer = (data) => {
+        setSelectedCardPlayer({selected: true, card: data});
         checkStateSelection();
     }
 
-    const handleClickHand    = (data) => {
+    const handleClickHand = (data) => {
         return 0
     }
 
-    // useEffect(async ()  => {
-    //     const result = await getMatchInfo()
-    //     while (result.status === 'Deck is pending'){
-    //         console.log('LET ME IN')
-    //         result = setInterval(async () => {
-    //             return await getMatchInfo()
-    //         }, 2000);        
-    //     }
-    //     setBoard({player1: result.player1, player2: result.player2});
-    // });
+    useEffect( () => {
+        async function fetchData() {
+            console.log("useEffect")
+            let result = await getMatchInfo(cookies.session)
+            while (result.status === 'Deck is pending') {
+                console.log('LET ME IN')
+                result = setInterval(async () => {
+                    return await getMatchInfo()
+                }, 2000);
+            }
+        setBoard({player1: result.player1, player2: result.player2});
+        }
+        fetchData();
+    });
 
     return (
         <div>
@@ -53,7 +58,8 @@ const Plateau = (props) => {
                         <div className="row">
                             <h1>{board.player2.hp}</h1>
                             <div className="col-1 card float-left border-3 border-dark">
-                                <img src="../../ressources/p2.png" className="card-img-top" alt="image de perso nul"></img>
+                                <img src="../../ressources/p2.png" className="card-img-top"
+                                     alt="image de perso nul"></img>
                                 <div className="bg-light text-black">
                                     <span>Player 2</span>
                                 </div>
@@ -61,27 +67,39 @@ const Plateau = (props) => {
                             <div className='col-11'>
                                 <div className='row justify-content-center'>
                                     <div className="col-2 cardReact-anime card-game">
-                                        <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
+                                        <CardReact data={{
+                                            key: "Ivern",
+                                            name: "Ivern",
+                                            info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                        }}/>
                                     </div>
                                     <div className="col-2 cardReact-anime card-game">
-                                        <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
+                                        <CardReact data={{
+                                            key: "Ivern",
+                                            name: "Ivern",
+                                            info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                        }}/>
                                     </div>
                                     <div className="col-2 cardReact-anime card-game">
-                                        <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
-                                    </div> 
+                                        <CardReact data={{
+                                            key: "Ivern",
+                                            name: "Ivern",
+                                            info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                        }}/>
+                                    </div>
                                 </div>
                             </div>
-                            {/*<PlateauDeck deck={board.player2.board} clickHandler={handleClickAdversary} />*/}
-                            
+
                         </div>
-                        
+
                     </div>
                     <hr className="border-3"></hr>
                     <div className="container-fluid">
                         <div className="row">
                             <h1>{board.player1.hp}</h1>
                             <div className="col-1 card float-left border-3 border-dark">
-                                <img src="../../ressources/p2.png" className="card-img-top" alt="image de perso nul"></img>
+                                <img src="../../ressources/p2.png" className="card-img-top"
+                                     alt="image de perso nul"></img>
                                 <div className="bg-light text-black">
                                     <span>Player 1</span>
                                 </div>
@@ -89,49 +107,84 @@ const Plateau = (props) => {
                             <div className='col-11'>
                                 <div className='row justify-content-center'>
                                     <div className="col-2 cardReact-anime card-game">
-                                        <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
+                                        <CardReact data={{
+                                            key: "Ivern",
+                                            name: "Ivern",
+                                            info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                        }}/>
                                     </div>
                                     <div className="col-2 cardReact-anime card-game">
-                                        <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
+                                        <CardReact data={{
+                                            key: "Ivern",
+                                            name: "Ivern",
+                                            info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                        }}/>
                                     </div>
                                     <div className="col-2 cardReact-anime card-game">
-                                        <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
-                                    </div> 
-                                    <div className="col-2 cardReact-anime card-game">
-                                        <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
+                                        <CardReact data={{
+                                            key: "Ivern",
+                                            name: "Ivern",
+                                            info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                        }}/>
                                     </div>
                                     <div className="col-2 cardReact-anime card-game">
-                                        <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
+                                        <CardReact data={{
+                                            key: "Ivern",
+                                            name: "Ivern",
+                                            info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                        }}/>
                                     </div>
                                     <div className="col-2 cardReact-anime card-game">
-                                        <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
-                                    </div> 
+                                        <CardReact data={{
+                                            key: "Ivern",
+                                            name: "Ivern",
+                                            info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                        }}/>
+                                    </div>
+                                    <div className="col-2 cardReact-anime card-game">
+                                        <CardReact data={{
+                                            key: "Ivern",
+                                            name: "Ivern",
+                                            info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                        }}/>
+                                    </div>
                                 </div>
                             </div>
-                            {/*<PlateauDeck deck={board.player2.board} clickHandler={handleClickAdversary} />*/}
-                            
+
                         </div>
-                        
+
                     </div>
-                    </div>
-            
+                </div>
+
                 <div className="container fixed-bottom mb-n3 hand">
 
                     <div className='row'>
                         <div className="col-1 d-flex align-item-center">
-                            <button className="btn btn-info h-3"> pick card </button>
+                            <button className="btn btn-info h-3"> pick card</button>
                         </div>
                         <div className='col-11'>
                             <div className='row justify-content-center'>
                                 <div className="col-2 cardReact-anime card-game">
-                                    <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
+                                    <CardReact data={{
+                                        key: "Ivern",
+                                        name: "Ivern",
+                                        info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                    }}/>
                                 </div>
                                 <div className="col-2 cardReact-anime card-game">
-                                    <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
+                                    <CardReact data={{
+                                        key: "Ivern",
+                                        name: "Ivern",
+                                        info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                    }}/>
                                 </div>
                                 <div className="col-2 cardReact-anime card-game">
-                                    <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
-                                </div> 
+                                    <CardReact data={{
+                                        key: "Ivern",
+                                        name: "Ivern",
+                                        info: {attack: 9, defense: 9, difficulty: 9, magic: 9}
+                                    }}/>
+                                </div>
                             </div>
                         </div>
                     </div>
