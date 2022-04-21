@@ -42,7 +42,7 @@ const Plateau = (props) => {
             while (result.status === 'Deck is pending') {
                 console.log('LET ME IN')
                 result = setInterval(async () => {
-                    return await getMatchInfo()
+                    return await getMatchInfo(cookies.session)
                 }, 2000);
             }
         setBoard({player1: result.player1, player2: result.player2});
