@@ -13,7 +13,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 .cardReact:hover {
+  z-index: 10;
   transform: scale(1.15);
+  transform-origin: top-left;
   transition:transform .5s ease-in-out;
 }
 
@@ -22,7 +24,8 @@ body::-webkit-scrollbar-thumb {
 }
 
 .cardReact-anime:hover {
-  transform: scale(1.15);
+  transform: scale(1);
+  transform-origin: center;
   transition:transform .5s ease-in-out;
 }
 
@@ -32,6 +35,15 @@ body::-webkit-scrollbar-thumb {
 
 .cardReact-anime {
   animation: append-animate .2s ease-in;
+}
+
+.battleGround {
+  background-image: url(./ressources/battleGround.jpg);
+  width:100vw; height:92vh;
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  background-size: contain;
 }
 
 @keyframes append-animate {

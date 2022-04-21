@@ -13,7 +13,7 @@ class AllCardList extends React.Component {
                                                         this.props.updateState(this.props.cards, this.props.choosed)
                                                     }
                                                 }
-                                            } className="col mt-3 cardReact"> <CardReact data={liste[key]} /> </div>
+                                            } className="col mt-3"> <CardReact data={liste[key]} /> </div>
                     })
                         
         }

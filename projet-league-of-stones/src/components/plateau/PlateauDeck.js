@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from "react";
+import CardReact from "../CardReact";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const PlateauDeck = () => {
-    
-
+const PlateauDeck = (props) => {
     return (
-        <p></p>
+        Object.keys(props.deck).map((key, index) => { 
+            return <div key={key} onClick={() => { 
+                        props.clickHandler({selected: true, card:props.deck[key]})
+                    }
+                } className="col-2 cardReact-anime card-game"> <CardReact data={props.deck[key]} /> </div>
+            })
     );
 }
 

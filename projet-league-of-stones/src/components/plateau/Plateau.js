@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PlateauDeck from './PlateauDeck'
+import CardReact from "../CardReact";
 
 
 const Plateau = () => {
@@ -25,60 +26,33 @@ const Plateau = () => {
 
     return (
         <div>
-            <div class=" vh-100 row align-items-center flex-grow-1 fixed-top">
-                <div class=' align-items-center'>
-                    <div class="row justify-content-md-center">
-                        <PlateauDeck deck={'cards'} clickHandler={handleClickAdversary} />
-                        <div class="col col-md-3 ">
-                            <div class="card-before card border-3 border-light">
-                                <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ivern_0.jpg" class="card-img-top" alt="image de perso nul"></img>
-                                <div class="bg-dark text-secondary">
-                                    <span>le nom du perso</span>
-                                </div>
+            <div className=" row align-items-center flex-grow-1 battleGround">
+                <div className='align-items-center'>
+                    <div className="container-fluid">
+                        <div className="row justify-content-center">
+                            <PlateauDeck deck={'cards'} clickHandler={handleClickPlayer} />
+                            <div className="col-2 cardReact-anime card-game">
+                                <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
                             </div>
-                        </div>
-                        <div class="col col-md-3 ">
-                            <div class="card-before card border-3 border-light">
-                                <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ivern_0.jpg" class="card-img-top" alt="image de perso nul"></img>
-                                <div class="bg-dark text-secondary">
-                                    <span>le nom du perso</span>
-                                </div>
+                            <div className="col-2 cardReact-anime card-game">
+                                <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
                             </div>
-                        </div>
-                        <div class="col col-md-3 ">
-                            <div class="card-before card border-3 border-light">
-                                <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ivern_0.jpg" class="card-img-top" alt="image de perso nul"></img>
-                                <div class="bg-dark text-secondary">
-                                    <span>le nom du perso</span>
-                                </div>
+                            <div className="col-2 cardReact-anime card-game">
+                                <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
                             </div>
                         </div>
                     </div>
-                    <hr></hr>
-                    <div class="row justify-content-md-center">
-                        <PlateauDeck deck={'cards'} clickHandler={handleClickPlayer} />
-                        <div class="col col-md-3 ">
-                            <div class="card-before card border-3 border-light">
-                                <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ivern_0.jpg" class="card-img-top" alt="image de perso nul"></img>
-                                <div class="bg-dark text-secondary">
-                                    <span>le nom du perso</span>
-                                </div>
+                    <div className="container-fluid">
+                        <div className="row justify-content-center">
+                            <PlateauDeck deck={'cards'} clickHandler={handleClickPlayer} />
+                            <div className="col-2 cardReact-anime">
+                                <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
                             </div>
-                        </div>
-                        <div class="col col-md-3 ">
-                            <div class="card-before card border-3 border-light">
-                                <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ivern_0.jpg" class="card-img-top" alt="image de perso nul"></img>
-                                <div class="bg-dark text-secondary">
-                                    <span>le nom du perso</span>
-                                </div>
+                            <div className="col-2 cardReact-anime">
+                                <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
                             </div>
-                        </div>
-                        <div class="col col-md-3 ">
-                            <div class="card-before card border-3 border-light">
-                                <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ivern_0.jpg" class="card-img-top" alt="image de perso nul"></img>
-                                <div class="bg-dark text-secondary">
-                                    <span>le nom du perso</span>
-                                </div>
+                            <div className="col-2 cardReact-anime">
+                                <CardReact data={{key:"Ivern", name:"Ivern", info : {attack:9, defense:9, difficulty:9, magic:9}}} />
                             </div>
                         </div>
                     </div>
