@@ -1,28 +1,51 @@
+
+const API_URL = `http://localhost:3001`;
+
+export const connect = async (email, password) => {
+
+    const response = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"email" :email, "password" : password})
+    });
+    return response;
+};
+
+export const register = async (name, email, password) => {
+
+    const response = await fetch(`${API_URL}/user`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"name" :name, "email" : email, "password" : password})
+    });
+    return response;
+};
+
 /*
 Connection queries
  */
 
-export const currentConnectedUser = () => {
-    fetch('http://localhost:3001/users/amIConnected', {
+export const currentConnectedUser = async (session) => {
+    const response = await fetch(`${API_URL}/users/amIConnected`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {
-        return response
-    })
-        .then(data => {
-            console.log(data)
-            return data
-        })
-}
+            'Content-Type': 'application/json',
+            'www-authenticate': session
+        }
+    });
+    return response;
+};
 
 
 /*  game queries
 
  */
 export const initDeck = (jsonDeck) => {
-    fetch('http://localhost:3001/match/initDeck?deck=' + jsonDeck, {
+    fetch(`${API_URL}/match/initDeck?deck=`+jsonDeck, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -37,12 +60,12 @@ export const initDeck = (jsonDeck) => {
 }
 
 export const getMatchInfo = async () => {
-    let data = await fetch('http://localhost:3001/match/getMatch');
+    let data = await fetch(`${API_URL}/match/getMatch`);
     return await data.json()
 }
 
 export const getAllMatchInfo = async () => {
-    let data = await fetch('http://localhost:3001/match/getAllMatch');
+    let data = await fetch(`${API_URL}/match/getAllMatch`);
     return await data.json()
 }
 /* Combat queries
@@ -50,33 +73,33 @@ export const getAllMatchInfo = async () => {
  */
 
 export const playCard = async (idCard) => {
-    let data = await fetch('http://localhost:3001/match/playCard?card=' + idCard);
+    let data = await fetch(`${API_URL}/match/playCard?card=` + idCard);
     return await data.json()
 }
 
 export const pickCard = async () => {
-    let data = await fetch('http://localhost:3001/match/pickCard');
+    let data = await fetch(`${API_URL}/match/pickCard`);
     return await data.json()
 }
 
 export const attackEnemyCard = async (idMine, idAdv) => {
-    let data = await fetch('http://localhost:3001/match/attack?card=' + {idMine} + "&enemyCard=" + {idAdv});
+    let data = await fetch(`${API_URL}/match/attack?card=` + {idMine} + "&enemyCard=" + {idAdv});
     return await data.json()
 }
 
 
 export const attackPlayer = async () => {
-    let data = await fetch('http://localhost:3001/match/attackPlayer');
+    let data = await fetch(`${API_URL}/match/attackPlayer`);
     return await data.json()
 }
 
 export const endTurn = async () => {
-    let data = await fetch('http://localhost:3001/match/endTurn')
+    let data = await fetch(`${API_URL}/match/endTurn`)
     return await data.json()
 }
 
 export const finishMatch = async () => {
-    let data = fetch('http://localhost:3001/match/finishMatch')
+    let data = fetch(`${API_URL}/match/finishMatch`)
     return await data.json()
 }
 
@@ -84,17 +107,57 @@ export const finishMatch = async () => {
 /* Matchmaking queries
 
  */
-export const unparticipate = async () => {
-    let data = await fetch('http://localhost:3001/matchmaking/unparticipate')
-    return await data.json()
+
+export const getMatchmakingAvailablePlayers = async (session) => {
+
+    const response = await fetch(`${API_URL}/matchmaking/getAll`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            "www-authenticate": session
+        }
+    });
+    return response;
+};
+
+export const participateMatchMaking = async (session) => {
+
+    const response = await fetch(`${API_URL}/matchmaking/participate`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            "www-authenticate": session
+        }
+    });
+    return response;
+};
+
+export const unparticipateMatchMaking = async (session) => {
+
+    const response = await fetch(`${API_URL}/matchmaking/unparticipate`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            "www-authenticate": session
+        }
+    });
+    return response;
 }
 
-export const requestPlayer = async (idPlayer) => {
-    let data = await fetch('http://localhost:3001/matchmaking/request?matchmakingId=' + idPlayer);
-    return await data.json()
+export const requestPlayer = async (session, idPlayer) => {
+    let response = await fetch(`${API_URL}/matchmaking/request?matchmakingId=` + idPlayer, {
+        headers: {
+            'www-authenticate': session
+        }
+    });
+    return response;
 }
 
-export const acceptRequest = async (idPlayer) => {
-    let data = await fetch('http://localhost:3001/matchmaking/acceptRequest?matchmakingId=' + idPlayer)
-    return await data.json()
+export const acceptRequest = async (session, idPlayer) => {
+    let response = await fetch(`${API_URL}/matchmaking/acceptRequest?matchmakingId=` + idPlayer, {
+        headers: {
+            'www-authenticate': session
+        }
+    });
+    return response;
 }
