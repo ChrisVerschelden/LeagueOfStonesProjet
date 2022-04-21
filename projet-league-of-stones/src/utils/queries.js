@@ -30,8 +30,6 @@ Connection queries
  */
 
 export const currentConnectedUser = async (session) => {
-    console.log("currentConnectedUser");
-    console.log(session);
     const response = await fetch(`${API_URL}/users/amIConnected`, {
         method: 'GET',
         headers: {
