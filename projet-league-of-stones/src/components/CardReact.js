@@ -14,16 +14,24 @@ class CardReact extends React.Component {
     
     render() { 
             const address = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + this.props.data.key + "_0.jpg"
+            let stars = []
+            const num = parseInt(this.props.data.info.difficulty)
+            for (let step = 0; step < num; step++) {
+                stars.push(<span style={{color: 'gold'}}>★</span>)
+            }
+
             return (
                 <div className="card border-3 border-light bg-black cardReact" style={{width: '10rem', height: '13rem'}}>
                     <img src={address} className="card-img card-cover" alt="image de perso nul"/>
-                    <div className="text-secondary card-img-overlay text-center">
-                        <p className='card-title bg-black float-start w-100'>{this.props.data.name}</p>
-                        <span className='card-text float-start'> attack :     {this.props.data.info.attack}     </span><br/>
-                        <span className='card-text float-start'> defense :    {this.props.data.info.defense}    </span><br/>
-                        {/* <span className='float-start'> difficulty : {this.props.data.info.difficulty} </span><br/>
-                        <span className='float-start'> magic :      {this.props.data.info.magic}      </span> */}
-                    </div>
+                    <p className='nom-perso w-100'>
+                        {stars}
+                        <br></br>
+                        {this.props.data.name}
+                    </p>
+                    <div class="quarter-circle-bottom-left"></div>
+                    <span className="text-card-left">{this.props.data.info.attack}</span>
+                    <div class="quarter-circle-bottom-rigth"></div>
+                    <span className="text-card-rigth">{this.props.data.info.defense}</span>
                 </div>
             )
         }

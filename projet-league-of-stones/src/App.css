@@ -24,7 +24,68 @@ body::-webkit-scrollbar-thumb {
 }
 
 .card-cover {
-  object-fit: fill;
+  width: 10rem;
+  height: 13rem;
+  object-fit: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.quarter-circle-bottom-left{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  background: rgba(101, 94, 141, 0.6);
+  border-radius: 0 50px 0 0;
+  -moz-border-radius: 0 50px 0 0;
+  -webkit-border-radius: 0 50px 0 0;
+}
+
+.text-card-left {
+  position: absolute;
+  font-size: larger;
+  font-weight: bolder;
+  color: white;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+.nom-perso {
+  position: absolute;
+  font-weight: bolder;
+  color: white;
+  background: rgba(101, 94, 141, 0.6);
+  top: 0;
+  left: 0;
+}
+
+.text-card-rigth {
+  position: absolute;
+  font-size: larger;
+  font-weight: bolder;
+  color: white;
+  bottom: 0;
+  right: 0;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.quarter-circle-bottom-rigth{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background: rgba(101, 94, 141, 0.6);
+  border-radius: 50px 0 0 0;
+  -moz-border-radius: 50px 0 0 0;
+  -webkit-border-radius: 50px 0 0 0;
 }
 
 .cardReact:hover img {
@@ -79,7 +140,6 @@ body::-webkit-scrollbar-thumb {
   background: rgba(101, 94, 141, 0.6);
 }
 
-<<<<<<< HEAD
 .player {
   position: fixed;
   z-index: 500;
@@ -103,7 +163,9 @@ body::-webkit-scrollbar-thumb {
 .player.player-2 {
   bottom: 0;
   margin-bottom: 100px;
-=======
+
+}
+
 .l {
   box-shadow: 0 4px 8px 0 rgb(221, 217, 217), 0 6px 20px 0 rgb(221, 217, 217);
 }
@@ -135,7 +197,6 @@ body::-webkit-scrollbar-thumb {
 .table-fixed thead > tr > th {
   float: left;
   position: relative;
->>>>>>> cda5c63fde7585eede687d77e3124c88630c9b85
 }
 
 
