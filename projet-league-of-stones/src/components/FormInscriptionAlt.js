@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { register } from '../utils/queries.js';
 
 const FormInscriptionAlt = () => {
 
@@ -20,22 +21,28 @@ const FormInscriptionAlt = () => {
         pristine_setEmail(true);pristine_setPassword(true); pristine_setPasswordConf(true);pristine_setUserName(true)
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
         event.stopPropagation()
-        fetch('http://localhost:3001/user', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({"name" :userName, "email" : email, "password" : passwordConf})
-        }).then(response => {
-            if (response.status !== 200) {
-                alert('un compte avec ce pseudo ou email existe déjà');
-            }else if (response.status === 200) {
-                document.location.href = '/success';
+        
+        const response = await register(userName, email, password);
+        if (response) {
+            if ("status" in response) {
+                switch (response.status) {
+                    case 200:
+                        const data = await response.json();
+                        if (data) {
+                            if ("id" in data) {
+                                document.location.href = '/login'
+                            }
+                        }
+                        break;
+                
+                    default:
+                        break;
+                }
             }
-        })
+        }
     }
 
     return (
