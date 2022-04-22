@@ -64,6 +64,9 @@ body::-webkit-scrollbar-thumb {
 * ==========================================
 *
 */
+tr {
+  line-height: 38px;
+}
 .l {
   box-shadow: 0 4px 8px 0 rgb(221, 217, 217), 0 6px 20px 0 rgb(221, 217, 217);
 } 

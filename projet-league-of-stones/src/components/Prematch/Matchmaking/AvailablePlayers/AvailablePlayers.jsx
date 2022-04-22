@@ -3,23 +3,17 @@ import { useState, useEffect, useCallback } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
-
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import '../../../../App.css';
 
 
 import ReactDOM from 'react-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faKhanda } from "@fortawesome/free-solid-svg-icons"
+
 
 export const AvailablePlayers = (props) => {
     const [players, setPlayers] = useState();
     const [playersUl, setPlayersUl] = useState( <tbody>
-                                                    <tr>
-                                                        <td scope="col" className="col-3"></td>
-                                                        <td scope="col" className="col-3"></td>
-                                                        <td scope="col" className="col-3"></td>
-                                                        <td scope="col" className="col-3"></td>
-                                                    </tr>
+                                                    
                                                 </tbody>
                                                );
 
@@ -35,7 +29,7 @@ export const AvailablePlayers = (props) => {
                                     <td scope="col" className="col-3">{cpt}</td>
                                     <td scope="col" className="col-3">{player.name}</td>
                                     <td scope="col" className="col-3">{player.email}</td>
-                                    <td scope="col" className="col-3"><a>defier</a></td>
+                                    <td scope="col" className="col-3"><button type="button" class="btn btn-light btn-sm"><i class="bi bi-shield-slash"></i></button></td>
                                 </tr>);
                 }
             }
