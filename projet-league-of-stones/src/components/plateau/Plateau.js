@@ -9,9 +9,9 @@ import {useCookies} from "react-cookie";
 
 const Plateau = (props) => {
     const [cookies, setCookie] = useCookies(['name']);
-    const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected: false, card: null})
-    const [selectedCardPlayer, setSelectedCardPlayer] = useState({selected: false, card: null})
-    const [board, setBoard] = useState({player1: {}, player2: {}})
+    const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected:false, card: {}})
+    const [selectedCardPlayer, setSelectedCardPlayer]       = useState({selected:false, card: {}})
+    const [board, setBoard]                                 = useState({player1:{}, player2:{}})
 
     const checkStateSelection = async () => {
         if (selectedCardAdversary.selected === true && selectedCardPlayer.selected === true) {
