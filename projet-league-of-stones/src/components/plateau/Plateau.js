@@ -8,8 +8,8 @@ import { stringifyDeck } from "../../utils/osef";
 
 const Plateau = (props) => {
 
-    const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected:false, card: null})
-    const [selectedCardPlayer, setSelectedCardPlayer]       = useState({selected:false, card: null})
+    const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected:false, card: {}})
+    const [selectedCardPlayer, setSelectedCardPlayer]       = useState({selected:false, card: {}})
     const [board, setBoard]                                 = useState({player1:{}, player2:{}})
 
     const checkStateSelection = async () => {
