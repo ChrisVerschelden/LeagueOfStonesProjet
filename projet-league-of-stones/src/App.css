@@ -174,9 +174,7 @@ body::-webkit-scrollbar-thumb {
 
 }
 
-.l {
-  box-shadow: 0 4px 8px 0 rgb(221, 217, 217), 0 6px 20px 0 rgb(221, 217, 217);
-}
+
 
 
 /*
@@ -186,6 +184,9 @@ body::-webkit-scrollbar-thumb {
 * ==========================================
 *
 */
+.l {
+  box-shadow: 0 4px 8px 0 rgb(221, 217, 217), 0 6px 20px 0 rgb(221, 217, 217);
+}
 .table-fixed tbody {
   height: 300px;
   overflow-y: auto;
