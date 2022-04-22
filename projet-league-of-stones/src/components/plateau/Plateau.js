@@ -35,20 +35,26 @@ const Plateau = (props) => {
         return 0
     }
 
-    useEffect( () => {
+    useEffect(() => {
         async function fetchData() {
             console.log("useEffect")
-            let result = await getMatchInfo(cookies.session)
-            while (result.status === 'Deck is pending') {
+            let result = await (await getMatchInfo(cookies.session)).json()
+            const interval = setInterval(async () => {
                 console.log('LET ME IN')
-                result = setInterval(async () => {
-                    return await getMatchInfo(cookies.session)
+                result = await (await getMatchInfo(cookies.session)).json()
+                console.log(result)
+                if (result.status !== 'Deck is pending') {
+                    clearInterval(interval)
+                }
+
                 }, 2000);
-            }
-        setBoard({player1: result.player1, player2: result.player2});
+            setBoard({player1: result.player1, player2: result.player2});
+            console.log("bonjour")
         }
         fetchData();
-    });
+    }, []);
+
+    useEffect(() => { console.log("board"); console.log(board); }, [board]);
 
     return (
         <div>
