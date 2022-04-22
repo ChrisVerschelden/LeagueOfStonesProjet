@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
+
 import '../../../../App.css';
 
 
@@ -14,89 +15,16 @@ export const AvailablePlayers = (props) => {
     const [players, setPlayers] = useState();
     const [playersUl, setPlayersUl] = useState( <tbody>
                                                     <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
+                                                        <td scope="col" className="col-3"></td>
+                                                        <td scope="col" className="col-3"></td>
+                                                        <td scope="col" className="col-3"></td>
+                                                        <td scope="col" className="col-3"></td>
                                                     </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                        <td scope="col" className="col-3">test</td>
-                                                    </tr>
-
                                                 </tbody>
                                                );
 
 
-    /*const setupPlayersUl = useCallback(() => {
+    const setupPlayersUl = useCallback(() => {
         if (Array.isArray(players)) {
             const tbodyContent = []
             let cpt = 0
@@ -118,7 +46,7 @@ export const AvailablePlayers = (props) => {
 
     useEffect(() => { setupPlayersUl() }, [players])
 
-    useEffect(() => { if(Array.isArray(props.players)) setPlayers(props.players); }, [props.players])*/
+    useEffect(() => { if(Array.isArray(props.players)) setPlayers(props.players); }, [props.players])
 
     return (
         <div className='container-fluid vh-100'>
