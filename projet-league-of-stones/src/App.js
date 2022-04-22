@@ -12,6 +12,7 @@ import { HeaderComp } from './components/Header/HeaderComp';
 import { Logout } from './components/Logout';
 
 import { useEffect, useState } from 'react';
+import { AvailablePlayers } from './components/Prematch/Matchmaking/AvailablePlayers/AvailablePlayers';
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
           <Route path='/game'        element={<p></p>}/>
           <Route path='/prematch/matchmaking' element={
                                                         <RequireAuth>
-                                                          <MatchmakingSelection />
+                                                          <AvailablePlayers />
                                                         </RequireAuth>
                                                       }/>
           <Route path='/logout' element={
