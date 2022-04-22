@@ -5,6 +5,7 @@ import CardReact from "../CardReact";
 import {initDeck, getMatchInfo, attackEnemyCard} from "../../utils/queries";
 import {stringifyDeck} from "../../utils/osef";
 import {useCookies} from "react-cookie";
+import { PlayerCard } from "./PlayerCard";
 // {<PlateauDeck deck={board.player2.board} clickHandler={handleClickAdversary}/>}
 
 const Plateau = (props) => {
@@ -35,20 +36,20 @@ const Plateau = (props) => {
         return 0
     }
 
-    useEffect( () => {
-        async function fetchData() {
-            console.log("useEffect")
-            let result = await getMatchInfo(cookies.session)
-            while (result.status === 'Deck is pending') {
-                console.log('LET ME IN')
-                result = setInterval(async () => {
-                    return await getMatchInfo(cookies.session)
-                }, 2000);
-            }
-        setBoard({player1: result.player1, player2: result.player2});
-        }
-        fetchData();
-    });
+    // useEffect( () => {
+    //     async function fetchData() {
+    //         console.log("useEffect")
+    //         let result = await getMatchInfo(cookies.session)
+    //         while (result.status === 'Deck is pending') {
+    //             console.log('LET ME IN')
+    //             result = setInterval(async () => {
+    //                 return await getMatchInfo(cookies.session)
+    //             }, 2000);
+    //         }
+    //     setBoard({player1: result.player1, player2: result.player2});
+    //     }
+    //     fetchData();
+    // });
 
     return (
         <div>
@@ -57,14 +58,10 @@ const Plateau = (props) => {
                     <div className="container-fluid mt-4">
                         <div className="row">
                             <h1>{board.player2.hp}</h1>
-                            <div className="col-1 card float-left border-3 border-dark">
-                                <img src="../../ressources/p2.png" className="card-img-top"
-                                     alt="image de perso nul"></img>
-                                <div className="bg-light text-black">
-                                    <span>Player 2</span>
-                                </div>
+                            <div className='col-2'>
+                                <PlayerCard turn={false} name={"Player name"} pv={"100"} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
                             </div>
-                            <div className='col-11'>
+                            <div className='col-10'>
                                 <div className='row justify-content-center'>
                                     <div className="col-2 cardReact-anime card-game">
                                         <CardReact data={{
@@ -89,22 +86,16 @@ const Plateau = (props) => {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                     <hr className="border-3"></hr>
                     <div className="container-fluid">
                         <div className="row">
                             <h1>{board.player1.hp}</h1>
-                            <div className="col-1 card float-left border-3 border-dark">
-                                <img src="../../ressources/p2.png" className="card-img-top"
-                                     alt="image de perso nul"></img>
-                                <div className="bg-light text-black">
-                                    <span>Player 1</span>
-                                </div>
+                            <div className='col-2'>
+                                <PlayerCard turn={true} name={"Player name"} pv={"100"} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
                             </div>
-                            <div className='col-11'>
+                            <div className='col-10'>
                                 <div className='row justify-content-center'>
                                     <div className="col-2 cardReact-anime card-game">
                                         <CardReact data={{
@@ -150,14 +141,10 @@ const Plateau = (props) => {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
-
                 <div className="container fixed-bottom mb-n3 hand">
-
                     <div className='row'>
                         <div className="col-1 d-flex align-item-center">
                             <button className="btn btn-info h-3"> pick card</button>
