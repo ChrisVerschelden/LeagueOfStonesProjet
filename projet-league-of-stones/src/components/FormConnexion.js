@@ -32,7 +32,7 @@ const FormConnexion = () => {
                         if (data) {
                             if ("token" in data && "email" in data && "name" in data) {
                                 let expiration = new Date();
-                                expiration.setHours(expiration.getHours() + 8);
+                                expiration.setHours(expiration.getHours() + 2);
                                 setCookie("session", data.token, {
                                     path: '/',
                                     expires: expiration

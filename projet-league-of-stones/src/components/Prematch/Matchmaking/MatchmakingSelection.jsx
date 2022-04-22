@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import { useBeforeunload } from 'react-beforeunload';
 
 import { getMatchmakingAvailablePlayers, participateMatchMaking, unparticipateMatchMaking } from '../../../utils/queries';
 
@@ -171,6 +172,12 @@ export const MatchmakingSelection = (props) => {
             checkForMatch();
         }
     }, [isParticipating, setupAvailablePlayers, setupRequests]);
+
+    useBeforeunload(() => {
+        if (cookies && "session" in cookies) {
+            unparticipateMatchMaking(cookies.session);
+        }
+    });
 
     useEffect(() => {
         const interval = setInterval(() => {
