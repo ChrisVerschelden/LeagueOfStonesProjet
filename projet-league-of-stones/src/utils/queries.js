@@ -46,19 +46,14 @@ export const currentConnectedUser = async (session) => {
 /*  game queries
 
  */
-export const initDeck = (jsonDeck) => {
-    fetch(`${API_URL}/match/initDeck?deck=`+jsonDeck, {
+export const initDeck = async (session,jsonDeck) => {
+    return await fetch(`${API_URL}/match/initDeck?deck=` + jsonDeck,{
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
-        },
-    }).then(response => {
-        return response
-    })
-        .then(data => {
-            console.log(data)
-            return data
-        })
+            'Content-Type': 'application/json',
+            "www-authenticate": session
+        }
+    });
 }
 
 export const getMatchInfo = async (session) => {

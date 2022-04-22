@@ -4,6 +4,7 @@ import AllCardList from "./AllCardList"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {stringifyDeck} from "../utils/osef";
 import {initDeck} from "../utils/queries";
+import {getMatchInfo} from "../utils/queries"
 
 class Interface extends React.Component {
     constructor(props) {
@@ -42,13 +43,18 @@ class Interface extends React.Component {
         }
     }
 
-    sendDeck = () => {
+    sendDeck = async () => {
+        console.log(this.props.cookies)
         this.setState({'deckMessage': 'DECK VALIDÉ !'})
         let output = ""
         Object.keys(this.state.choosedCardList).map(key => {
             output += this.state.choosedCardList[key].name + "\n"
         })
-        initDeck(stringifyDeck(this.state.choosedCardList))
+        let matchInfo = await getMatchInfo(this.props.cookies)
+        console.log(matchInfo)
+        let result = await initDeck( this.props.cookies,stringifyDeck(this.state.choosedCardList))
+
+        console.log(result)
         document.location.href = '/game'
     }
 
