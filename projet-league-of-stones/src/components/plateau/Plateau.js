@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PlateauDeck from './PlateauDeck'
 import CardReact from "../CardReact";
-import {initDeck, getMatchInfo, attackEnemyCard} from "../../utils/queries";
+import {initDeck, getMatchInfo, attackEnemyCard, pickCard} from "../../utils/queries";
 import {stringifyDeck} from "../../utils/osef";
 import {useCookies} from "react-cookie";
 import { PlayerCard } from "./PlayerCard";
@@ -12,7 +12,7 @@ const Plateau = (props) => {
     const [cookies, setCookie] = useCookies(['name']);
     const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected:false, card: {}})
     const [selectedCardPlayer, setSelectedCardPlayer]       = useState({selected:false, card: {}})
-    const [board, setBoard]                                 = useState({player1:{}, player2:{}})
+    const [board, setBoard]                                 = useState({player1:{board:[]}, player2:{board:[]}})
 
     const checkStateSelection = async () => {
         if (selectedCardAdversary.selected === true && selectedCardPlayer.selected === true) {
@@ -34,6 +34,16 @@ const Plateau = (props) => {
 
     const handleClickHand = (data) => {
         return 0
+    }
+
+    const handlePickCard = async () => {
+        await pickCard(cookies.session)
+        updateMachData()
+    }
+
+    const updateMachData = async () => {
+        let result = await (await getMatchInfo(cookies.session)).json()
+        setBoard({player1: result.player1, player2: result.player2});
     }
 
     useEffect(() => {
@@ -63,9 +73,8 @@ const Plateau = (props) => {
                 <div className='align-items-center mt-4'>
                     <div className="container-fluid mt-4">
                         <div className="row">
-                            <h1>{board.player2.hp}</h1>
                             <div className='col-2'>
-                                <PlayerCard turn={false} name={"Player name"} pv={"100"} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
+                                <PlayerCard turn={false} name={board.player2.name} pv={board.player2.hp} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
                             </div>
                             <div className='col-10'>
                                 <div className='row justify-content-center'>
@@ -77,9 +86,8 @@ const Plateau = (props) => {
                     <hr className="border-3"></hr>
                     <div className="container-fluid">
                         <div className="row">
-                            <h1>{board.player1.hp}</h1>
                             <div className='col-2'>
-                                <PlayerCard turn={true} name={"Player name"} pv={"100"} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
+                                <PlayerCard turn={board.player2.turn} name={board.player1.name} pv={board.player1.hp} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
                             </div>
                             <div className='col-10'>
                                 <div className='row justify-content-center'>

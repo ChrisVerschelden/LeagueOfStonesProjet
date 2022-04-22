@@ -79,9 +79,14 @@ export const playCard = async (idCard) => {
     return await data.json()
 }
 
-export const pickCard = async () => {
-    let data = await fetch(`${API_URL}/match/pickCard`);
-    return await data.json()
+export const pickCard = async (session) => {
+    let data = await fetch(`${API_URL}/match/pickCard`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            "www-authenticate": session
+        }
+    });
 }
 
 export const attackEnemyCard = async (idMine, idAdv) => {
