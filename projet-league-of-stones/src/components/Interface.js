@@ -42,19 +42,32 @@ class Interface extends React.Component {
             } 
         }
     }
+    c
 
     sendDeck = async () => {
         console.log(this.props.cookies)
+        const delay = ms => new Promise(res => setTimeout(res, ms));
         this.setState({'deckMessage': 'DECK VALIDÉ !'})
         let output = ""
         Object.keys(this.state.choosedCardList).map(key => {
             output += this.state.choosedCardList[key].name + "\n"
         })
         let matchInfo = await getMatchInfo(this.props.cookies)
+        await delay(1000)
         console.log(matchInfo)
-        let result = await initDeck( this.props.cookies,stringifyDeck(this.state.choosedCardList))
+        let result2 = await initDeck( this.props.cookies,stringifyDeck(this.state.choosedCardList))
+        await delay(1000)
+        const interval = setInterval(async () => {
+            console.log('LET ME IN')
+            matchInfo = await (await getMatchInfo(this.props.cookies)).json()
+            console.log(matchInfo)
+            if (matchInfo.player1.deck !== 0 && matchInfo.player2.deck !== 0) {
+                clearInterval(interval)
+            }
 
-        console.log(result)
+        }, 1000);
+        await delay(1000)
+        console.log(matchInfo)
         document.location.href = '/game'
     }
 
