@@ -32,14 +32,13 @@ Connection queries
  */
 
 export const currentConnectedUser = async (session) => {
-    const response = await fetch(`${API_URL}/users/amIConnected`, {
+    return await fetch(`${API_URL}/users/amIConnected`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'www-authenticate': session
         }
     });
-    return response;
 };
 
 

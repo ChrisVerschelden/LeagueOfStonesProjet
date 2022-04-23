@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PlateauDeck from './PlateauDeck'
 import CardReact from "../CardReact";
-import {initDeck, getMatchInfo, attackEnemyCard, pickCard} from "../../utils/queries";
+import {initDeck, getMatchInfo, attackEnemyCard, pickCard, currentConnectedUser} from "../../utils/queries";
 import {stringifyDeck} from "../../utils/osef";
 import {useCookies} from "react-cookie";
 import { PlayerCard } from "./PlayerCard";
@@ -12,11 +12,14 @@ const Plateau = (props) => {
     const [cookies, setCookie] = useCookies(['name']);
     const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected:false, card: {}})
     const [selectedCardPlayer, setSelectedCardPlayer]       = useState({selected:false, card: {}})
+    const [name, setName]       = useState({name:""})
+    const [currentPlayer, setPlayer]       = useState({ player:"" })
+
     const [board, setBoard]                                 = useState({player1:{board:[]}, player2:{board:[]}})
 
     const checkStateSelection = async () => {
         if (selectedCardAdversary.selected === true && selectedCardPlayer.selected === true) {
-            attackEnemyCard(selectedCardPlayer.card.key, selectedCardAdversary.card.key)
+            await attackEnemyCard(selectedCardPlayer.card.key, selectedCardAdversary.card.key)
             const result = await getMatchInfo()
             setBoard({player1: result.player1, player2: result.player2});
         }
@@ -38,17 +41,28 @@ const Plateau = (props) => {
 
     const handlePickCard = async () => {
         await pickCard(cookies.session)
-        updateMachData()
+        await updateMachData()
     }
 
     const updateMachData = async () => {
+        console.log(currentPlayer.player)
         let result = await (await getMatchInfo(cookies.session)).json()
-        setBoard({player1: result.player1, player2: result.player2});
+        if(currentPlayer.player === "1") {
+            setBoard({player1: result.player1, player2: result.player2});
+        }
+        else {
+            setBoard({player1: result.player2, player2: result.player2});
+            console.log(board.player1.hand)
+
+
+        }
     }
 
     useEffect(() => {
         async function fetchData() {
             console.log("useEffect")
+            let myName = await (await currentConnectedUser(cookies.session)).json()
+            setName(({name : myName.connectedUser.name}))
             let result = await (await getMatchInfo(cookies.session)).json()
             const interval = setInterval(async () => {
                 console.log('LET ME IN')
@@ -59,7 +73,15 @@ const Plateau = (props) => {
                 }
 
                 }, 2000);
-            setBoard({player1: result.player1, player2: result.player2});
+
+            if(result.player1.name=== name.name) {
+                setPlayer({player : "1"})
+            }
+            else {
+                setPlayer({player : "2"})
+            }
+
+            await updateMachData()
             console.log("bonjour")
         }
         fetchData();
@@ -67,8 +89,11 @@ const Plateau = (props) => {
 
     useEffect(() => { console.log("board"); console.log(board); }, [board]);
 
+
+
     return (
         <div>
+            <button onClick={updateMachData}>Click here</button>
             <div className="d-flex row align-items-start battleGround">
                 <div className='align-items-center mt-4'>
                     <div className="container-fluid mt-4">

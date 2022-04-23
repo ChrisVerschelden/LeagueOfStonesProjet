@@ -4,7 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const PlateauDeck = (props) => {
     if (props.deck) {
-        return ( props.deck.map((elem, index) => { 
+        let data = Array.from(props.deck)
+        return ( data.map((elem, index) => {
             return <div key={index} onClick={() => { 
                         props.clickHandler({selected: true, card:elem})
                     }
