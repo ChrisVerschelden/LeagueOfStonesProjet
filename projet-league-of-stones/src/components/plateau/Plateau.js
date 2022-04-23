@@ -12,7 +12,6 @@ const Plateau = (props) => {
     const [cookies, setCookie] = useCookies(['name']);
     const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected:false, card: {}})
     const [selectedCardPlayer, setSelectedCardPlayer]       = useState({selected:false, card: {}})
-    const [name, setName]       = useState({name:""})
     const [currentPlayer, setPlayer]       = useState({ player:"" })
 
     const [board, setBoard]                                 = useState({player1:{board:[]}, player2:{board:[]}})
@@ -51,18 +50,22 @@ const Plateau = (props) => {
             setBoard({player1: result.player1, player2: result.player2});
         }
         else {
-            setBoard({player1: result.player2, player2: result.player2});
+            setBoard({player1: result.player2, player2: result.player1});
+            console.log(result)
+            console.log("ici")
             console.log(board.player1.hand)
 
 
         }
     }
 
+
+
     useEffect(() => {
         async function fetchData() {
             console.log("useEffect")
             let myName = await (await currentConnectedUser(cookies.session)).json()
-            setName(({name : myName.connectedUser.name}))
+            const val = myName['connectedUser']['name']
             let result = await (await getMatchInfo(cookies.session)).json()
             const interval = setInterval(async () => {
                 console.log('LET ME IN')
@@ -73,8 +76,7 @@ const Plateau = (props) => {
                 }
 
                 }, 2000);
-
-            if(result.player1.name=== name.name) {
+            if(result.player1.name=== val.toString()) {
                 setPlayer({player : "1"})
             }
             else {
