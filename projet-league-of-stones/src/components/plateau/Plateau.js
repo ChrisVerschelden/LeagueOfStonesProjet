@@ -43,19 +43,14 @@ const Plateau = (props) => {
         await updateMachData()
     }
 
-    const updateMachData = async () => {
+    const updateMachData = async (playNum = "") => {
         console.log(currentPlayer.player)
         let result = await (await getMatchInfo(cookies.session)).json()
-        if(currentPlayer.player === "1") {
+        if(currentPlayer.player === "1" || playNum === "1") {
             setBoard({player1: result.player1, player2: result.player2});
         }
         else {
             setBoard({player1: result.player2, player2: result.player1});
-            console.log(result)
-            console.log("ici")
-            console.log(board.player1.hand)
-
-
         }
     }
 
@@ -64,6 +59,7 @@ const Plateau = (props) => {
     useEffect(() => {
         async function fetchData() {
             console.log("useEffect")
+            let playNum = ""
             let myName = await (await currentConnectedUser(cookies.session)).json()
             const val = myName['connectedUser']['name']
             let result = await (await getMatchInfo(cookies.session)).json()
@@ -77,13 +73,15 @@ const Plateau = (props) => {
 
                 }, 2000);
             if(result.player1.name=== val.toString()) {
-                setPlayer({player : "1"})
+                playNum = "1"
+                await setPlayer({player : "1"})
             }
             else {
-                setPlayer({player : "2"})
+                playNum = "2"
+                await setPlayer({player : "2"})
             }
-
-            await updateMachData()
+            await updateMachData(playNum)
+            console.log("which player")
             console.log("bonjour")
         }
         fetchData();
