@@ -15,7 +15,7 @@ export const Logout = () => {
     const doLogout = useCallback(() => {
         removeCookie("session", {path: '/'});
         dispatch(userDisconnect());
-        navigate('/login');
+        navigate('/');
     }, [removeCookie, navigate, dispatch]);
 
     useEffect(() => { doLogout(); }, [doLogout])

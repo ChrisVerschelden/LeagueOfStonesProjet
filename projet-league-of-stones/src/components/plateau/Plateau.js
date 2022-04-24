@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PlateauDeck from './PlateauDeck'
 import CardReact from "../CardReact";
-import {initDeck, getMatchInfo, attackEnemyCard, pickCard, playCard, currentConnectedUser, endTurn} from "../../utils/queries";
+import {initDeck, getMatchInfo, attackEnemyCard, pickCard, playCard, currentConnectedUser, endTurn, attackPlayer, finishMatch} from "../../utils/queries";
 import {stringifyDeck} from "../../utils/osef";
 import {useCookies} from "react-cookie";
 import { PlayerCard } from "./PlayerCard";
@@ -15,24 +15,48 @@ const Plateau = (props) => {
     const [currentPlayer, setPlayer]                        = useState({ player:"" })
     const [board, setBoard]                                 = useState({player1:{board:[]}, player2:{board:[]}})
 
-    const checkStateSelection = async () => {
-        if (board.player2.hand === [] &&  selectedCardPlayer.selected === true){
+    const autorefresh = (duration = 4000) => {
+        setInterval(() => {
+            updateMachData()
+        }, duration)
+    }
 
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    //autorefresh();
+
+    const checkStateSelection = async () => {
+        console.log("les deux sont cliqué : " + selectedCardAdversary.selected + " " + selectedCardPlayer.selected)
+        if (board.player2.board.length === 0 && selectedCardPlayer.selected === true){
+            console.log('i am there')
+            await attackPlayer(cookies.session, selectedCardPlayer.card.key)
+            const result = await getMatchInfo(cookies.session)
+            setSelectedCardAdversary({selected:false, card: {}})
+            setSelectedCardPlayer({selected:false, card: {}})
+            //await handleEndTurn()
+            await updateMachData()
         }
-        if (selectedCardAdversary.selected === true && selectedCardPlayer.selected === true) {
-            await attackEnemyCard(selectedCardPlayer.card.key, selectedCardAdversary.card.key)
-            const result = await getMatchInfo()
-            setBoard({player1: result.player1, player2: result.player2});
+        if (selectedCardAdversary.selected && selectedCardPlayer.selected) {
+            console.log('i am in : ' + selectedCardPlayer.card.key + " " + selectedCardAdversary.card.key)
+            await attackEnemyCard(cookies.session, selectedCardPlayer.card.key, selectedCardAdversary.card.key)
+            const result = await getMatchInfo(cookies.session)
+            setSelectedCardAdversary({selected:false, card: {}})
+            setSelectedCardPlayer({selected:false, card: {}})
+            //await handleEndTurn()
+            await updateMachData()
         }
     }
 
-    const handleClickAdversary = (data) => {
-        setSelectedCardAdversary({selected: true, card: data});
+    const handleClickAdversary = async (data) => {
+        console.log("selected card Adversary = " + data.card.key)
+        setSelectedCardAdversary(data);
+        //await delay(200);
         checkStateSelection();
     }
 
-    const handleClickPlayer = (data) => {
-        setSelectedCardPlayer({selected: true, card: data});
+    const handleClickPlayer = async (data) => {
+        console.log("selected card Player = " + data.card.key)
+        setSelectedCardPlayer(data);
+        //await delay(200);
         checkStateSelection();
     }
 
@@ -48,9 +72,14 @@ const Plateau = (props) => {
         await updateMachData()
     }
 
-    const handlePickCard = async (data) => {
+    const handlePickCard = async () => {
         console.log("card picked")
         await pickCard(cookies.session)
+        await updateMachData()
+    }
+
+    const handleFinishMatch = async () => {
+        await finishMatch(cookies.session)
         await updateMachData()
     }
 
@@ -94,6 +123,10 @@ const Plateau = (props) => {
             await updateMachData(playNum)
             console.log("which player")
             console.log("bonjour")
+
+            if (!result.player1.turn && !result.player2.turn) {
+                await handleFinishMatch();
+            }
         }
         fetchData();
     }, []);
@@ -104,7 +137,7 @@ const Plateau = (props) => {
 
     return (
         <div>
-            <button onClick={updateMachData}>Click here</button>
+            {/* <button onClick={updateMachData}>Click here</button> */}
             <div className="d-flex row align-items-start battleGround">
                 <div className='align-items-center mt-4'>
                     <div className="container-fluid mt-4">
@@ -113,8 +146,8 @@ const Plateau = (props) => {
                                 <PlayerCard turn={board.player2.turn} name={board.player2.name} pv={board.player2.hp} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
                             </div>
                             <div className='col-10'>
-                                <div className='row justify-content-center'>
-                                    <PlateauDeck hand={false} deck={board.player2.board} clickHandler={handleClickAdversary}/>
+                                <div className='row d-flex justify-content-center'>
+                                    <PlateauDeck hand={false} selectedCard={selectedCardAdversary} deck={board.player2.board} clickHandler={handleClickAdversary}/>
                                 </div>
                             </div>
                         </div>
@@ -126,8 +159,8 @@ const Plateau = (props) => {
                                 <PlayerCard turn={board.player1.turn} name={board.player1.name} pv={board.player1.hp} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
                             </div>
                             <div className='col-10'>
-                                <div className='row justify-content-center'>
-                                    <PlateauDeck hand={false} deck={board.player1.board} clickHandler={handleClickPlayer}/>
+                                <div className='row d-flex justify-content-center'>
+                                    <PlateauDeck hand={false} selectedCard={selectedCardPlayer} deck={board.player1.board} clickHandler={handleClickPlayer}/>
                                 </div>
                             </div>
                         </div>
@@ -138,9 +171,9 @@ const Plateau = (props) => {
                         <div className="col-1 d-flex align-item-center">
                             <button className="btn btn-info h-3" onClick={() => {handlePickCard()}}>pick card</button>
                         </div>
-                        <div className='col-10'>
+                        <div className='col-10' style={{height:"12rem"}}>
                             <div className='row justify-content-center'>
-                                <PlateauDeck hand={true} deck={board.player1.hand} clickHandler={handleClickHand}/>
+                                <PlateauDeck hand={true} selectedCard={{card:{}}} deck={board.player1.hand} clickHandler={handleClickHand}/>
                             </div>
                         </div>
                         <div className="col-1 d-flex align-item-center">

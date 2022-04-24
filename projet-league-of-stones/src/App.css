@@ -121,6 +121,10 @@ body::-webkit-scrollbar-thumb {
 
 }
 
+.selected-card {
+  filter: grayscale(1);
+}
+
 .scale-down {
   transform: scale(.95);
   animation: none;
