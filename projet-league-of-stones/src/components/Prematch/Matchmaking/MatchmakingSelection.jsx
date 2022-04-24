@@ -35,6 +35,13 @@ import { MatchRequests } from './MatchRequests/MatchRequests';
 //     ]
 // }
 
+const CONSTANTS = {
+    CONFIRM_LEAVING: {
+        FR: "Voulez-vous quitter le matchmaking ?",
+        EN: "Do you want to leave matchmaking ?",
+    }
+}
+
 const INTERVAL_REPEAT = 5 * 1000;
 
 export const MatchmakingSelection = (props) => {
@@ -160,6 +167,17 @@ export const MatchmakingSelection = (props) => {
         }
     }, [isParticipating, setupAvailablePlayers, setupRequests, checkForMatch]);
 
+    // Not working, cannot guarantee to successfuly achieve fetch/any API call with 'beforeunload' event type
+    const handleUnload = useCallback((e) => {
+        e.preventDefault();
+        const doExit = window.confirm(CONSTANTS.CONFIRM_LEAVING.FR);
+        if (doExit) {
+            if (session && typeof(session) === "string") {
+                unparticipateMatchMaking(session);
+            }
+        }
+    }, [session]);
+
     useEffect(() => {
         console.log("useEffect lanceur boucle");
         const interval = setInterval(() => {
@@ -170,6 +188,13 @@ export const MatchmakingSelection = (props) => {
     }, [isParticipating, updatePlayers])
 
     useEffect(() => { updatePlayers(); }, [updatePlayers]);
+
+    // Not working, cannot guarantee to successfuly achieve fetch/any API call with 'beforeunload' event type
+    useEffect(() => {
+        window.addEventListener('beforeunload', handleUnload);
+
+        return () => window.removeEventListener('beforeunload', handleUnload);
+    }, [handleUnload]);
 
     return (
         <div className="container py-2">

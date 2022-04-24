@@ -57,7 +57,15 @@ export const HeaderComp = (props) => {
 
     }, [session, state]);
 
-    useEffect(() => { setupNavbarVersion(); }, [setupNavbarVersion])
+    useEffect(() => { setupNavbarVersion(); }, [setupNavbarVersion]);
+
+    // useEffect(() => {
+    //     console.log("chgmnt");
+    //     console.log("state");
+    //     console.log(state);
+    //     console.log("session");
+    //     console.log(session);
+    // }, [state]);
 
     return component;
 };

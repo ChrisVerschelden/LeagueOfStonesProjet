@@ -17,7 +17,12 @@ class Interface extends React.Component {
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let matchInfo = await (await getMatchInfo(this.props.cookies)).json()
+
+        if (matchInfo.player1.deck > 0 && matchInfo.player2.deck > 0) {
+            document.location.href = '/game'
+        }
         const result = {}
         fetch('http://localhost:3001/cards')
         .then((data) => {
@@ -45,18 +50,40 @@ class Interface extends React.Component {
 
     sendDeck = async () => {
         console.log(this.props.cookies)
+        const delay = ms => new Promise(res => setTimeout(res, ms));
         this.setState({'deckMessage': 'DECK VALIDÉ !'})
-        let output = ""
-        Object.keys(this.state.choosedCardList).map(key => {
-            output += this.state.choosedCardList[key].name + "\n"
-        })
+        // let output = ""
+        // Object.keys(this.state.choosedCardList).map(key => {
+        //     output += this.state.choosedCardList[key].name + "\n"
+        // })
         let matchInfo = await getMatchInfo(this.props.cookies)
-        console.log(matchInfo)
-        let result = await initDeck( this.props.cookies,stringifyDeck(this.state.choosedCardList))
+        await delay(1000)
+        const makingDeck = stringifyDeck(this.state.choosedCardList)
+        const deckDone = await setInterval(async () => {
+            console.log('doing deck')
+            let result2 = await(await initDeck( this.props.cookies,makingDeck)).json()
+            console.log(result2)
+            if (result2.name) {
+                clearInterval(deckDone)
+                await delay(5000)
+                const interval = await setInterval(async () => {
+                    console.log('LET ME IN')
+                    matchInfo = await (await getMatchInfo(this.props.cookies)).json()
+                    console.log(matchInfo)
+                    if (matchInfo.player1.deck !== 0 && matchInfo.player2.deck !== 0) {
+                        clearInterval(interval)
+                        await delay(5000)
+                        document.location.href = '/game'
+                    }
 
-        console.log(result)
-        document.location.href = '/game'
+                }, 2000);
+
+            }
+        }, 2000);
+
     }
+
+
 
     render() {
         let display_cards = ""
@@ -67,6 +94,7 @@ class Interface extends React.Component {
             size_deck  = 12
             hidden = 'hidden'
         }
+
         return (
                 <section className="container-fluid pb-5">
                     <div className="row">
