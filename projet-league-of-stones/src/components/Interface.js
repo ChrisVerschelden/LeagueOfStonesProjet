@@ -17,7 +17,12 @@ class Interface extends React.Component {
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let matchInfo = await (await getMatchInfo(this.props.cookies)).json()
+
+        if (matchInfo.player1.deck > 0 && matchInfo.player2.deck > 0) {
+            document.location.href = '/game'
+        }
         const result = {}
         fetch('http://localhost:3001/cards')
         .then((data) => {
@@ -79,6 +84,8 @@ class Interface extends React.Component {
 
     }
 
+
+
     render() {
         let display_cards = ""
         let size_deck  = 6
@@ -88,6 +95,7 @@ class Interface extends React.Component {
             size_deck  = 12
             hidden = 'hidden'
         }
+
         return (
                 <section className="container-fluid pb-5">
                     <div className="row">
