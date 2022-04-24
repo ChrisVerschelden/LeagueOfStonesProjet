@@ -15,14 +15,13 @@ const Plateau = (props) => {
     const [currentPlayer, setPlayer]                        = useState({ player:"" })
     const [board, setBoard]                                 = useState({player1:{board:[]}, player2:{board:[]}})
 
-    const autorefresh = (duration = 4000) => {
+    const autorefresh = async (ms, num) => {
         setInterval(() => {
-            updateMachData()
-        }, duration)
+            updateMachData(num)
+        }, ms)
     }
 
     const delay = ms => new Promise(res => setTimeout(res, ms));
-    //autorefresh();
 
     const checkStateSelection = async () => {
         console.log("les deux sont cliqué : " + selectedCardAdversary.selected + " " + selectedCardPlayer.selected)
@@ -121,6 +120,7 @@ const Plateau = (props) => {
                 await setPlayer({player : "2"})
             }
             await updateMachData(playNum)
+            autorefresh(4000, playNum);
             console.log("which player")
             console.log("bonjour")
 

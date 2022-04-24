@@ -2,7 +2,7 @@ import React from "react"
 
 export const PlayerCard = (props) => {
 
-    const turnIndicator = props.turn ? <p className="turn-indicator">YOUR TURN</p> : <p className="turn-indicator">NOT YOUR TURN</p>;
+    const turnIndicator = props.turn ? <p className="turn-indicator">YOUR TURN</p> : <p className="turn-indicator">WAITING FOR OPPONENT</p>;
     return(
         <div className="card float-left border-3 border-dark player">
             <img src={props.img} className="card-img card-cover"/>
