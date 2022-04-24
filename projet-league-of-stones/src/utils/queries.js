@@ -85,7 +85,7 @@ export const playCard = async (session, idCard) => {
 }
 
 export const pickCard = async (session) => {
-    let data = await fetch(`${API_URL}/match/pickCard`, {
+    await fetch(`${API_URL}/match/pickCard`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ export const pickCard = async (session) => {
 }
 
 export const attackEnemyCard = async (session, idMine, idAdv) => {
-    let data = await fetch(`${API_URL}/match/attack?card=` + idMine + "&ennemyCard=" + idAdv,{
+    await fetch(`${API_URL}/match/attack?card=` + idMine + "&ennemyCard=" + idAdv,{
         method: 'GET',
             headers: {
             'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ export const attackPlayer = async (session, idMine) => {
 }
 
 export const endTurn = async (session) => {
-    let data = await fetch(`${API_URL}/match/endTurn`,{
+    await fetch(`${API_URL}/match/endTurn`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

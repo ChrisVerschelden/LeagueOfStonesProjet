@@ -4,8 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import FormConnexion from './components/FormConnexion'
 import FormInscriptionAlt from './components/FormInscriptionAlt';
 import Interface from './components/Interface'
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import { Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { MatchmakingSelection } from './components/Prematch/Matchmaking/MatchmakingSelection';
 import { RequireAuth } from './components/RequireAuth/RequireAuth';
@@ -13,10 +13,12 @@ import { HeaderComp } from './components/Header/HeaderComp';
 import { Logout } from './components/Logout';
 import Plateau from "./components/plateau/Plateau";
 
+import { useEffect, useState } from 'react';
+import { AvailablePlayers } from './components/Prematch/Matchmaking/AvailablePlayers/AvailablePlayers';
 
 function App() {
-  const [cookies, setCookie] = useCookies(['name']);
-  const session = "session" in cookies ? cookies.session : null;
+  let session = useSelector(state => state.session);
+  session = session && typeof(session) === "string" ? session : null;
   return (
     <div className="App">
       <header className="App-header">

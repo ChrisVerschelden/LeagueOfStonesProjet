@@ -1,15 +1,16 @@
 import React, {useState, useEffect} from "react";
+import { useSelector } from 'react-redux';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import PlateauDeck from './PlateauDeck'
 import CardReact from "../CardReact";
 import {initDeck, getMatchInfo, attackEnemyCard, pickCard, playCard, currentConnectedUser, endTurn, attackPlayer, finishMatch} from "../../utils/queries";
 import {stringifyDeck} from "../../utils/osef";
-import {useCookies} from "react-cookie";
 import { PlayerCard } from "./PlayerCard";
-// {}
 
 const Plateau = (props) => {
-    const [cookies, setCookie] = useCookies(['name']);
+    const session = useSelector(state => state.session);
     const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected:false, card: {}})
     const [selectedCardPlayer, setSelectedCardPlayer]       = useState({selected:false, card: {}})
     const [currentPlayer, setPlayer]                        = useState({ player:"" })
@@ -24,24 +25,26 @@ const Plateau = (props) => {
     const delay = ms => new Promise(res => setTimeout(res, ms));
 
     const checkStateSelection = async () => {
-        console.log("les deux sont cliqué : " + selectedCardAdversary.selected + " " + selectedCardPlayer.selected)
-        if (board.player2.board.length === 0 && selectedCardPlayer.selected === true){
-            console.log('i am there')
-            await attackPlayer(cookies.session, selectedCardPlayer.card.key)
-            const result = await getMatchInfo(cookies.session)
-            setSelectedCardAdversary({selected:false, card: {}})
-            setSelectedCardPlayer({selected:false, card: {}})
-            //await handleEndTurn()
-            await updateMachData()
-        }
-        if (selectedCardAdversary.selected && selectedCardPlayer.selected) {
-            console.log('i am in : ' + selectedCardPlayer.card.key + " " + selectedCardAdversary.card.key)
-            await attackEnemyCard(cookies.session, selectedCardPlayer.card.key, selectedCardAdversary.card.key)
-            const result = await getMatchInfo(cookies.session)
-            setSelectedCardAdversary({selected:false, card: {}})
-            setSelectedCardPlayer({selected:false, card: {}})
-            //await handleEndTurn()
-            await updateMachData()
+        if (session && typeof(session) === "string") {
+            console.log("les deux sont cliqué : " + selectedCardAdversary.selected + " " + selectedCardPlayer.selected)
+            if (board.player2.board.length === 0 && selectedCardPlayer.selected === true){
+                console.log('i am there')
+                await attackPlayer(session, selectedCardPlayer.card.key)
+                const result = await getMatchInfo(session)
+                setSelectedCardAdversary({selected:false, card: {}})
+                setSelectedCardPlayer({selected:false, card: {}})
+                //await handleEndTurn()
+                await updateMachData()
+            }
+            if (selectedCardAdversary.selected && selectedCardPlayer.selected) {
+                console.log('i am in : ' + selectedCardPlayer.card.key + " " + selectedCardAdversary.card.key)
+                await attackEnemyCard(session, selectedCardPlayer.card.key, selectedCardAdversary.card.key)
+                const result = await getMatchInfo(session)
+                setSelectedCardAdversary({selected:false, card: {}})
+                setSelectedCardPlayer({selected:false, card: {}})
+                //await handleEndTurn()
+                await updateMachData()
+            }
         }
     }
 
@@ -60,36 +63,46 @@ const Plateau = (props) => {
     }
 
     const handleClickHand = async (data) => {
-        console.log("card played = " + data.card.key )
-        await playCard(cookies.session, data.card.key)
-        await updateMachData()
+        if (session && typeof(session) === "string") {
+            console.log("card played = " + data.card.key )
+            await playCard(session, data.card.key)
+            await updateMachData()
+        }
     }
 
     const handleEndTurn = async () => {
-        console.log("turn ended")
-        await endTurn(cookies.session)
-        await updateMachData()
+        if (session && typeof(session) === "string") {
+            console.log("turn ended")
+            await endTurn(session)
+            await updateMachData()
+        }
     }
 
     const handlePickCard = async () => {
-        console.log("card picked")
-        await pickCard(cookies.session)
-        await updateMachData()
+        if (session && typeof(session) === "string") {
+            console.log("card picked")
+            await pickCard(session)
+            await updateMachData()
+        }
     }
 
     const handleFinishMatch = async () => {
-        await finishMatch(cookies.session)
-        await updateMachData()
+        if (session && typeof(session) === "string") {
+            await finishMatch(session)
+            await updateMachData()
+        }
     }
 
     const updateMachData = async (playNum = "") => {
         console.log(currentPlayer.player)
-        let result = await (await getMatchInfo(cookies.session)).json()
-        if(currentPlayer.player === "1" || playNum === "1") {
-            setBoard({player1: result.player1, player2: result.player2});
-        }
-        else {
-            setBoard({player1: result.player2, player2: result.player1});
+        if (session && typeof(session) === "string") {
+            let result = await (await getMatchInfo(session)).json()
+            if(currentPlayer.player === "1" || playNum === "1") {
+                setBoard({player1: result.player1, player2: result.player2});
+            }
+            else {
+                setBoard({player1: result.player2, player2: result.player1});
+            }
         }
     }
 
@@ -99,33 +112,35 @@ const Plateau = (props) => {
         async function fetchData() {
             console.log("useEffect")
             let playNum = ""
-            let myName = await (await currentConnectedUser(cookies.session)).json()
-            const val = myName['connectedUser']['name']
-            let result = await (await getMatchInfo(cookies.session)).json()
-            const interval = setInterval(async () => {
-                console.log('LET ME IN')
-                result = await (await getMatchInfo(cookies.session)).json()
-                console.log(result)
-                if (result.status !== 'Deck is pending') {
-                    clearInterval(interval)
+            if (session && typeof(session) === "string") {
+                let myName = await (await currentConnectedUser(session)).json()
+                const val = myName['connectedUser']['name']
+                let result = await (await getMatchInfo(session)).json()
+                const interval = setInterval(async () => {
+                    console.log('LET ME IN')
+                    result = await (await getMatchInfo(session)).json()
+                    console.log(result)
+                    if (result.status !== 'Deck is pending') {
+                        clearInterval(interval)
+                    }
+
+                    }, 2000);
+                if(result.player1.name=== val.toString()) {
+                    playNum = "1"
+                    await setPlayer({player : "1"})
                 }
+                else {
+                    playNum = "2"
+                    await setPlayer({player : "2"})
+                }
+                await updateMachData(playNum)
+                autorefresh(4000, playNum);
+                console.log("which player")
+                console.log("bonjour")
 
-                }, 2000);
-            if(result.player1.name=== val.toString()) {
-                playNum = "1"
-                await setPlayer({player : "1"})
-            }
-            else {
-                playNum = "2"
-                await setPlayer({player : "2"})
-            }
-            await updateMachData(playNum)
-            autorefresh(4000, playNum);
-            console.log("which player")
-            console.log("bonjour")
-
-            if (!result.player1.turn && !result.player2.turn) {
-                await handleFinishMatch();
+                if (!result.player1.turn && !result.player2.turn) {
+                    await handleFinishMatch();
+                }
             }
         }
         fetchData();

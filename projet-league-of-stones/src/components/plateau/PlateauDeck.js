@@ -1,4 +1,3 @@
-import React, {useState, useEffect} from "react";
 import CardReact from "../CardReact";
 import 'bootstrap/dist/css/bootstrap.min.css';
 

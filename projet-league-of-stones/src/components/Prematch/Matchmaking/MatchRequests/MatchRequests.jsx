@@ -1,12 +1,12 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { acceptRequest } from '../../../../utils/queries';
 
 export const MatchRequests = (props) => {
-    const [cookies, setCookie] = useCookies(['name']);
+    const session = useSelector(state => state.session);
     const navigate = useNavigate();
 
     const [players, setPlayers] = useState();
@@ -36,17 +36,18 @@ export const MatchRequests = (props) => {
                 setStopParticipateButton(BUTTONS.DISABLED.STOPPARTICIPATE);
             }
         }
-    }, [props.isParticipating, props.handleParticipating, setParticipateButton, setStopParticipateButton]);
+    }, [props, setParticipateButton, setStopParticipateButton]);
 
     const handleAcceptRequest = useCallback(async (matchmakingId) => {
-        if (cookies && "session" in cookies) {
-            const response = await acceptRequest(cookies.session, matchmakingId);
+        if (session && typeof(session) === "string") {
+            const response = await acceptRequest(session, matchmakingId);
             if (response) {
-                console.log("response");
-                console.log(response);
+                // console.log("response");
+                // console.log(response);
                 if ("status" in response) {
                     switch (response.status) {
                         case 200:
+                            console.log("navigate('/composeDeck');");
                             navigate('/composeDeck');
                             break;
                         default:
@@ -57,7 +58,7 @@ export const MatchRequests = (props) => {
                 }
             }
         }
-    }, [cookies, acceptRequest]);
+    }, [session, navigate]);
 
     const setupPlayersUl = useCallback(() => {
         if (Array.isArray(players)) {
@@ -69,13 +70,13 @@ export const MatchRequests = (props) => {
             }
             setPlayersUl(<ul className="list-group list-group-flush">{liList}</ul>);
         }
-      }, [players, setPlayersUl]);
+      }, [players, setPlayersUl, handleAcceptRequest]);
 
+    useEffect(() => { setupPlayersUl(); }, [players, setupPlayersUl]);
 
-    useEffect(() => { setupPlayersUl(); console.log(players); }, [players]);
+    useEffect(() => { if("players" in props && Array.isArray(props.players)) setPlayers(props.players); }, [props]);
 
-    useEffect(() => { if("players" in props && Array.isArray(props.players)) setPlayers(props.players); }, [props.players]);
-    useEffect(() => { setupParticipateButtons(); }, [props.isParticipating]);
+    useEffect(() => { setupParticipateButtons(); }, [props.isParticipating, setupParticipateButtons]);
 
     return (
         <div className="col container px-1">

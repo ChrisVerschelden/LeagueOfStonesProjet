@@ -5,7 +5,7 @@ export const PlayerCard = (props) => {
     const turnIndicator = props.turn ? <p className="turn-indicator">YOUR TURN</p> : <p className="turn-indicator">WAITING FOR OPPONENT</p>;
     return(
         <div className="card float-left border-3 border-dark player">
-            <img src={props.img} className="card-img card-cover"/>
+            <img src={props.img} className="card-img card-cover" alt={`card of ${props.name}`}/>
             <div>
                 <p className='nom-perso w-100'>
                     {props.name}

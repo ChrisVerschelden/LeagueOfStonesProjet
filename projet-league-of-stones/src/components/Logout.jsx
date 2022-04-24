@@ -1,22 +1,23 @@
 
 import { useEffect, useState, useCallback } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { userDisconnect } from '../store';
+import { unparticipateMatchMaking } from '../utils/queries';
 
 export const Logout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const session = useSelector(state => state.session);
 
-    const [component, setComponent] = useState();
-    const [cookies, setCookies, removeCookie] = useCookies(['name']);
+    const [component, ] = useState();
 
     const doLogout = useCallback(() => {
-        removeCookie("session", {path: '/'});
+        if (session && typeof(session) === "string") unparticipateMatchMaking(session);
         dispatch(userDisconnect());
-        navigate('/');
-    }, [removeCookie, navigate, dispatch]);
+        navigate('/login');
+    }, [navigate, dispatch, session]);
 
     useEffect(() => { doLogout(); }, [doLogout])
 

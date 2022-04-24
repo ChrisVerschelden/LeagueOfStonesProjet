@@ -1,102 +1,99 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux'; 
 
 import { getMatchmakingAvailablePlayers, participateMatchMaking, unparticipateMatchMaking } from '../../../utils/queries';
 
 import { AvailablePlayers } from './AvailablePlayers/AvailablePlayers';
 import { MatchRequests } from './MatchRequests/MatchRequests';
 
-const CONSTANTS = {
-    USERS_TITLE: {
-        FR: "Joueurs",
-        EN: "Players"
-    }
-}
+// const DEBUG = {
+//     PLAYERS: [
+//         {
+//             "name": "Angel",
+//             "email": "angel@gmail.com",
+//             "matchmakingId": "010203"
+//         },
+//         {
+//             "name": "Ansar",
+//             "email": "ansar@gmail.com",
+//             "matchmakingId": "040506"
+//         },
+//         {
+//             "name": "Chris",
+//             "email": "chris@gmail.com",
+//             "matchmakingId": "070809"
+//         }
+//     ],
+//     REQUESTS: [
+//         {
+//             "name": "Chris",
+//             "email": "chris@gmail.com",
+//             "matchmakingId": "070809"
+//         }
+//     ]
+// }
 
-const DEBUG = {
-    PLAYERS: [
-        {
-            "name": "Angel",
-            "email": "angel@gmail.com",
-            "matchmakingId": "010203"
-        },
-        {
-            "name": "Ansar",
-            "email": "ansar@gmail.com",
-            "matchmakingId": "040506"
-        },
-        {
-            "name": "Chris",
-            "email": "chris@gmail.com",
-            "matchmakingId": "070809"
-        }
-    ],
-    REQUESTS: [
-        {
-            "name": "Chris",
-            "email": "chris@gmail.com",
-            "matchmakingId": "070809"
-        }
-    ]
+const CONSTANTS = {
+    CONFIRM_LEAVING: {
+        FR: "Voulez-vous quitter le matchmaking ?",
+        EN: "Do you want to leave matchmaking ?",
+    }
 }
 
 const INTERVAL_REPEAT = 5 * 1000;
 
 export const MatchmakingSelection = (props) => {
+    const session = useSelector(state => state.session);
     const navigate = useNavigate();
 
     const [availablePlayers, setAvailablePlayers] = useState([]);
     const [receivedRequests, setReceivedRequests] = useState([]);
     const [isParticipating, setIsParticipating] = useState(true);
-    const [updateCheckValue, setUpdateCheckValue] = useState(1);
-
-    const [cookies, setCookie] = useCookies(['name']);
 
     const handleParticipating = useCallback(async (doParticipate) => {
-        if (doParticipate) {
-            const response = await participateMatchMaking(cookies.session);
-            if (response) {
-                if ("status" in response) {
-                    switch (response.status) {
-                        case 200:
-                            console.log("response");
-                            console.log(await response.json());
-                            console.log("Now participating");
-                            setIsParticipating(doParticipate);
-                            break;
-                    
-                        default:
-                            console.log(`not 200, response: ${await response.text()}`);
-                            break;
+        if (session && typeof(session) === "string") {
+            if (doParticipate) {
+                const response = await participateMatchMaking(session);
+                if (response) {
+                    if ("status" in response) {
+                        switch (response.status) {
+                            case 200:
+                                // console.log("Now participating");
+                                setIsParticipating(doParticipate);
+                                break;
+                        
+                            default:
+                                console.error(`not 200, response: ${await response.text()}`);
+                                break;
+                        }
                     }
                 }
-            }
-        } else {
-            const response = await unparticipateMatchMaking(cookies.session);
-            if (response) {
-                if ("status" in response) {
-                    switch (response.status) {
-                        case 200:
-                            console.log("Not participating anymore", doParticipate);
-                            setIsParticipating(doParticipate);
-                            setAvailablePlayers([]);
-                            break;
-                    
-                        default:
-                            console.log(`not 200, response: ${await response.text()}`);
-                            break;
+            } else {
+                const response = await unparticipateMatchMaking(session);
+                if (response) {
+                    if ("status" in response) {
+                        switch (response.status) {
+                            case 200:
+                                // console.log("Not participating anymore", doParticipate);
+                                setIsParticipating(doParticipate);
+                                setAvailablePlayers([]);
+                                break;
+                        
+                            default:
+                                console.error(`not 200, response: ${await response.text()}`);
+                                break;
+                        }
                     }
                 }
             }
         }
-    }, [setIsParticipating]);
+    }, [setIsParticipating, session]);
 
     const setupAvailablePlayers = useCallback(async () => {
-        console.log("setupAvailablePlayers");
-        if ("session" in cookies) {
-            const response = await getMatchmakingAvailablePlayers(cookies.session);
+        if (session && typeof(session) === "string") {
+            const response = await getMatchmakingAvailablePlayers(session);
             if (response) {
                 if ("status" in response) {
                     switch (response.status) {
@@ -112,11 +109,11 @@ export const MatchmakingSelection = (props) => {
                 }
             }
         }
-    }, []);
+    }, [session]);
 
     const setupRequests = useCallback( async () => {
-        if (cookies && "session" in cookies) {
-            const response = await participateMatchMaking(cookies.session);
+        if (session && typeof(session) === "string") {
+            const response = await participateMatchMaking(session);
             if (response) {
                 if ("status" in response) {
                     switch (response.status) {
@@ -125,8 +122,6 @@ export const MatchmakingSelection = (props) => {
                             if ("request" in data) {
                                 setReceivedRequests(data.request);
                             }
-                            console.log("data");
-                            console.log(data);
                             break;
                     
                         default:
@@ -136,52 +131,72 @@ export const MatchmakingSelection = (props) => {
                 }
             }
         }
-    }, []);
+    }, [session]);
     
     const checkForMatch = useCallback( async () => {
-        if (cookies && "session" in cookies) {
-            const response = await participateMatchMaking(cookies.session);
+        if (session && typeof(session) === "string") {
+            const response = await participateMatchMaking(session);
             if (response) {
                 if ("status" in response) {
                     switch (response.status) {
                         case 200:
-                            console.log("response");
                             try {
                                 const data = await response.json();
                                 if ("match" in data) {
+                                    console.log("navigate('/composeDeck');");
                                     navigate('/composeDeck');
                                 }
                             } catch (err) { console.error(err); }
-                            console.log(await response.json());
                             break;
                     
                         default:
-                            console.log(`not 200, response: ${await response.text()}`);
+                            console.error(`not 200, response: ${await response.text()}`);
                             break;
                     }
                 }
             }
         }
-    }, [cookies]);
+    }, [session, navigate]);
 
     const updatePlayers = useCallback(() => {
+        console.log("updatePlayers", isParticipating);
         if (isParticipating) {
             setupAvailablePlayers();
             setupRequests();
             checkForMatch();
         }
-    }, [isParticipating, setupAvailablePlayers, setupRequests]);
+    }, [isParticipating, setupAvailablePlayers, setupRequests, checkForMatch]);
+
+    // Not working, cannot guarantee to successfuly achieve fetch/any API call with 'beforeunload' event type
+    const handleUnload = useCallback((e) => {
+        e.preventDefault();
+        const doExit = window.confirm(CONSTANTS.CONFIRM_LEAVING.FR);
+        if (doExit) {
+            if (session && typeof(session) === "string") {
+                unparticipateMatchMaking(session);
+            }
+        }
+    }, [session]);
 
     useEffect(() => {
+        console.log("useEffect lanceur boucle");
         const interval = setInterval(() => {
-            console.log('Logs every minute');
-            updatePlayers();
-            console.log(isParticipating);
+        console.log("boucle");
+        updatePlayers();
         }, INTERVAL_REPEAT);
         return () => clearInterval(interval);
-    }, [isParticipating])
+    }, [isParticipating, updatePlayers])
 
-    useEffect(() => { updatePlayers(); }, [])
+    useEffect(() => { updatePlayers(); }, [updatePlayers]);
+
+    // Not working, cannot guarantee to successfuly achieve fetch/any API call with 'beforeunload' event type
+    useEffect(() => {
+        window.addEventListener('beforeunload', handleUnload);
+
+        return () => window.removeEventListener('beforeunload', handleUnload);
+    }, [handleUnload]);
+
+    useEffect(() => {console.log("availablePlayers"); console.log(availablePlayers)}, [availablePlayers]);
 
     return (
         <div className="container py-2">
