@@ -94,14 +94,26 @@ export const pickCard = async (session) => {
     });
 }
 
-export const attackEnemyCard = async (idMine, idAdv) => {
-    let data = await fetch(`${API_URL}/match/attack?card=` + {idMine} + "&enemyCard=" + {idAdv});
+export const attackEnemyCard = async (session, idMine, idAdv) => {
+    let data = await fetch(`${API_URL}/match/attack?card=` + {idMine} + "&enemyCard=" + {idAdv},{
+        method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+                "www-authenticate": session
+        }
+    });
     return await data.json()
 }
 
 
-export const attackPlayer = async () => {
-    let data = await fetch(`${API_URL}/match/attackPlayer`);
+export const attackPlayer = async (session) => {
+    let data = await fetch(`${API_URL}/match/attackPlayer`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            "www-authenticate": session
+        }
+    });
     return await data.json()
 }
 
@@ -113,11 +125,20 @@ export const endTurn = async (session) => {
             "www-authenticate": session
         }
     });
+<<<<<<< HEAD
     return await data.json()
+=======
+>>>>>>> 3de98a561f899c621bb63dbf45d264f91b9f240f
 }
 
-export const finishMatch = async () => {
-    let data = fetch(`${API_URL}/match/finishMatch`)
+export const finishMatch = async (session) => {
+    let data = fetch(`${API_URL}/match/finishMatch`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            "www-authenticate": session
+        }
+    });
     return await data.json()
 }
 
