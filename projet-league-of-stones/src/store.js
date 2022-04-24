@@ -1,14 +1,27 @@
 import { createStore } from 'redux';
 
+console.log(localStorage);
+
 const initialState = {
-    session: "",
-    name: "",
-    email: ""
+    session: sessionStorage.getItem('session') || null,
+    name: localStorage['name'] || null,
+    email: localStorage['email'] || null,
+    lang: "FR"
 };
 
-export const userDisconnect = () => ({type: "userDisconnect"});
+export const userDisconnect = () => {
+    sessionStorage.removeItem('session');
+    localStorage.removeItem('email');
+    localStorage.removeItem('name');
+    return (
+        {type: "userDisconnect"}
+    );
+};
+
 export const userConnect = (token, email, name) =>{
-    console.log(`userConnect funct token: ${token}, email: ${email}, name: ${name}`);
+    sessionStorage.setItem('session', token);
+    localStorage.setItem('email', email);
+    localStorage.setItem('name', name);
     return ({
         type: "userConnect",
         payload: {session: token, email: email, name: name}
@@ -34,6 +47,8 @@ const reducer = (state = initialState, action) => {
         return obj;
     }
     console.log("no action:");
+    console.log("state");
+    console.log(state);
     return state;
 };
 

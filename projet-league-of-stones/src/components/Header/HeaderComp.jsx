@@ -2,11 +2,8 @@
 import { useEffect, useCallback, useState } from 'react'; 
 import { useSelector } from 'react-redux'; 
 import { Link } from 'react-router-dom';
-import { useCookies } from "react-cookie";
 
 import { isAuth } from '../../utils/auth';
-import { currentConnectedUser } from '../../utils/queries';
-
 
 const DEFAULT_NAVBAR = (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark text-light">
@@ -36,32 +33,31 @@ const getLoggedNavbar = (email, name, state) => {
             </ul>
         </div>
         <span>{name} ({email})</span>
-        <button onClick={() => console.log(state)}>Log state</button>
     </nav>
     );
 };
 
 export const HeaderComp = (props) => {
-    const state = useSelector(state => state)
-    const [cookies, setCookie] = useCookies(['name']);
+    const state = useSelector(state => state);
+    const session = state.session;
     let [component, setComponent] = useState(DEFAULT_NAVBAR);
 
     const setupNavbarVersion = useCallback(async () => {
-        if  ("session" in cookies && isAuth) {
-            const response = await currentConnectedUser(cookies.session);
-            if (response) {
-                const data = await response.json();
-                if ("connectedUser" in data) {
-                    const user = data.connectedUser;
-                    if ("email" in user && "name" in user) {
-                        setComponent(getLoggedNavbar(user.email, user.name, state));
-                    }
-                }
+        if (session && typeof(session) === "string") {
+            const auth = await isAuth(session);
+            if (auth) {
+                setComponent(getLoggedNavbar(state.email, state.name, state));
+            } else {
+                setComponent(DEFAULT_NAVBAR);
             }
+        } else {
+            setComponent(DEFAULT_NAVBAR);
         }
-    }, [cookies, state]);
 
-    useEffect(() => { setupNavbarVersion(); }, [cookies, setupNavbarVersion])
+
+    }, [session, state]);
+
+    useEffect(() => { setupNavbarVersion(); }, [setupNavbarVersion])
 
     return component;
 };

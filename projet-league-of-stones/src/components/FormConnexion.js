@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useMemo, useCallback } from "react";
-import { useCookies } from 'react-cookie';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { userConnect } from '../store';
 
@@ -16,8 +15,6 @@ const FormConnexion = () => {
     const [pristine_email, pristine_setemail] = useState(true);
     const [pristine_password, pristine_setPassword] = useState(true);
     const [component, setComponent] = useState();
-    
-    const [cookies, setCookie] = useCookies(['name']);
 
     const handleSubmit = useCallback (async (event) => {
         event.preventDefault()
@@ -31,14 +28,8 @@ const FormConnexion = () => {
                         const data = await response.json();
                         if (data) {
                             if ("token" in data && "email" in data && "name" in data) {
-                                let expiration = new Date();
-                                expiration.setHours(expiration.getHours() + 8);
-                                setCookie("session", data.token, {
-                                    path: '/',
-                                    expires: expiration
-                                });
-                                const test = userConnect(data.token, data.email, data.name);
-                                dispatch(test);
+                                const connectAction = userConnect(data.token, data.email, data.name);
+                                dispatch(connectAction);
                                 navigate('/prematch/matchmaking');
                             }
                         }
@@ -49,7 +40,7 @@ const FormConnexion = () => {
                 }
             }
         }
-    }, [setCookie, dispatch, email, navigate, password] );
+    }, [dispatch, email, navigate, password] );
 
     const COMPONENT = useMemo( () => (
         <div className='container-fluid vh-100'>

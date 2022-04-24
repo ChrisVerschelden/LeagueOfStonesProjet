@@ -1,27 +1,31 @@
 
-import { Route, Navigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
+import { Navigate } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux'; 
 
 import { isAuth } from '../../utils/auth';
 
 export const RequireAuth = ({ children }: { children: JSX.Element }) => {
+  const session = useSelector(state => state.session);
+  const [auth, setAuth] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const [cookies, setCookie] = useCookies(['name']);
-  let auth = false;
-  if ("session" in cookies) {
-    auth = isAuth(cookies.session);
-    console.log("auth?");
-    console.log("auth");
-  }
+  const setupAuth = useCallback(async () => {
+    if (session && typeof(session) === "string") {
+      setAuth(await isAuth(session));
+    }
+    setLoading(false);
+  }, [session]);
 
-  if (!auth) {
-    // Redirect them to the /login page, but save the current location they were
-    // trying to go to when they were redirected. This allows us to send them
-    // along to that page after they login, which is a nicer user experience
-    // than dropping them off on the home page.
-    return <Navigate to="/login"  />;
-  }
+  useEffect(() => { setupAuth(); }, [setupAuth])
 
-  return children;
+  return (
+    auth ?
+      (children)
+      :
+      loading ?
+        (<div>LOADING...</div>)
+        :
+        (<Navigate to="/login" />) 
+    );
 }
