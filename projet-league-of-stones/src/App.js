@@ -13,6 +13,8 @@ import { HeaderComp } from './components/Header/HeaderComp';
 import { Logout } from './components/Logout';
 import Plateau from "./components/plateau/Plateau";
 
+import { useEffect, useState } from 'react';
+import { AvailablePlayers } from './components/Prematch/Matchmaking/AvailablePlayers/AvailablePlayers';
 
 function App() {
   let session = useSelector(state => state.session);

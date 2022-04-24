@@ -196,6 +196,8 @@ export const MatchmakingSelection = (props) => {
         return () => window.removeEventListener('beforeunload', handleUnload);
     }, [handleUnload]);
 
+    useEffect(() => {console.log("availablePlayers"); console.log(availablePlayers)}, [availablePlayers]);
+
     return (
         <div className="container py-2">
             <h1>Matchmaking</h1>
