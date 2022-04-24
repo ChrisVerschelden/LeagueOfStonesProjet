@@ -128,14 +128,13 @@ export const endTurn = async (session) => {
 }
 
 export const finishMatch = async (session) => {
-    let data = fetch(`${API_URL}/match/finishMatch`, {
+    await fetch(`${API_URL}/match/finishMatch`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             "www-authenticate": session
         }
     });
-    return await data.json()
 }
 
 

@@ -89,14 +89,22 @@ const Plateau = (props) => {
     const handleFinishMatch = async () => {
         if (session && typeof(session) === "string") {
             await finishMatch(session)
-            await updateMachData()
+            document.location.href= "/prematch/matchmaking"
         }
     }
 
     const updateMachData = async (playNum = "") => {
         console.log(currentPlayer.player)
+        let errored
         if (session && typeof(session) === "string") {
-            let result = await (await getMatchInfo(session)).json()
+            let result = await (await getMatchInfo(session)).json().catch((error =>
+            errored = error))
+            console.log(errored)
+            console.log("au dessus")
+            if (result == null || result.player1 == null ||errored || (!result.player1.turn && !result.player2.turn)  ) {
+                console.log("match fini")
+                await handleFinishMatch();
+            }
             if(currentPlayer.player === "1" || playNum === "1") {
                 setBoard({player1: result.player1, player2: result.player2});
             }
@@ -138,9 +146,7 @@ const Plateau = (props) => {
                 console.log("which player")
                 console.log("bonjour")
 
-                if (!result.player1.turn && !result.player2.turn) {
-                    await handleFinishMatch();
-                }
+
             }
         }
         fetchData();
