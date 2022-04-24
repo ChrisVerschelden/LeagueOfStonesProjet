@@ -73,8 +73,14 @@ export const getAllMatchInfo = async () => {
 
  */
 
-export const playCard = async (idCard) => {
-    let data = await fetch(`${API_URL}/match/playCard?card=` + idCard);
+export const playCard = async (session, idCard) => {
+    let data = await fetch(`${API_URL}/match/playCard?card=` + idCard,{
+        method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+                "www-authenticate": session
+        }
+    });
     return await data.json()
 }
 
@@ -99,8 +105,14 @@ export const attackPlayer = async () => {
     return await data.json()
 }
 
-export const endTurn = async () => {
-    let data = await fetch(`${API_URL}/match/endTurn`)
+export const endTurn = async (session) => {
+    let data = await fetch(`${API_URL}/match/endTurn`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            "www-authenticate": session
+        }
+    });
     return await data.json()
 }
 

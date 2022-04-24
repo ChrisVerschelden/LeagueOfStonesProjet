@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PlateauDeck from './PlateauDeck'
 import CardReact from "../CardReact";
-import {initDeck, getMatchInfo, attackEnemyCard, pickCard, currentConnectedUser} from "../../utils/queries";
+import {initDeck, getMatchInfo, attackEnemyCard, pickCard, playCard, currentConnectedUser, endTurn} from "../../utils/queries";
 import {stringifyDeck} from "../../utils/osef";
 import {useCookies} from "react-cookie";
 import { PlayerCard } from "./PlayerCard";
@@ -12,11 +12,13 @@ const Plateau = (props) => {
     const [cookies, setCookie] = useCookies(['name']);
     const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected:false, card: {}})
     const [selectedCardPlayer, setSelectedCardPlayer]       = useState({selected:false, card: {}})
-    const [currentPlayer, setPlayer]       = useState({ player:"" })
-
+    const [currentPlayer, setPlayer]                        = useState({ player:"" })
     const [board, setBoard]                                 = useState({player1:{board:[]}, player2:{board:[]}})
 
     const checkStateSelection = async () => {
+        if (board.player2.hand === [] &&  selectedCardPlayer.selected === true){
+
+        }
         if (selectedCardAdversary.selected === true && selectedCardPlayer.selected === true) {
             await attackEnemyCard(selectedCardPlayer.card.key, selectedCardAdversary.card.key)
             const result = await getMatchInfo()
@@ -34,11 +36,20 @@ const Plateau = (props) => {
         checkStateSelection();
     }
 
-    const handleClickHand = (data) => {
-        return 0
+    const handleClickHand = async (data) => {
+        console.log("card played = " + data.card.key )
+        await playCard(cookies.session, data.card.key)
+        await updateMachData()
     }
 
-    const handlePickCard = async () => {
+    const handleEndTurn = async () => {
+        console.log("turn ended")
+        await endTurn(cookies.session)
+        await updateMachData()
+    }
+
+    const handlePickCard = async (data) => {
+        console.log("card picked")
         await pickCard(cookies.session)
         await updateMachData()
     }
@@ -99,11 +110,11 @@ const Plateau = (props) => {
                     <div className="container-fluid mt-4">
                         <div className="row">
                             <div className='col-2'>
-                                <PlayerCard turn={false} name={board.player2.name} pv={board.player2.hp} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
+                                <PlayerCard turn={board.player2.turn} name={board.player2.name} pv={board.player2.hp} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
                             </div>
                             <div className='col-10'>
                                 <div className='row justify-content-center'>
-                                    <PlateauDeck deck={board.player2.board} clickHandler={handleClickAdversary}/>
+                                    <PlateauDeck hand={false} deck={board.player2.board} clickHandler={handleClickAdversary}/>
                                 </div>
                             </div>
                         </div>
@@ -112,11 +123,11 @@ const Plateau = (props) => {
                     <div className="container-fluid">
                         <div className="row">
                             <div className='col-2'>
-                                <PlayerCard turn={board.player2.turn} name={board.player1.name} pv={board.player1.hp} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
+                                <PlayerCard turn={board.player1.turn} name={board.player1.name} pv={board.player1.hp} img={"https://e6.pngbyte.com/pngpicture/265700/png-Don-T-Starve-Characters-Woodie-Transparent-Afeitarse-Clipart-don-t-starve.png"} />
                             </div>
                             <div className='col-10'>
                                 <div className='row justify-content-center'>
-                                    <PlateauDeck deck={board.player1.board} clickHandler={handleClickPlayer}/>
+                                    <PlateauDeck hand={false} deck={board.player1.board} clickHandler={handleClickPlayer}/>
                                 </div>
                             </div>
                         </div>
@@ -125,12 +136,15 @@ const Plateau = (props) => {
                 <div className="container fixed-bottom mb-n3 hand">
                     <div className='row'>
                         <div className="col-1 d-flex align-item-center">
-                            <button className="btn btn-info h-3"> pick card</button>
+                            <button className="btn btn-info h-3" onClick={() => {handlePickCard()}}>pick card</button>
                         </div>
-                        <div className='col-11'>
+                        <div className='col-10'>
                             <div className='row justify-content-center'>
-                                <PlateauDeck deck={board.player1.hand} clickHandler={handleClickHand}/>
+                                <PlateauDeck hand={true} deck={board.player1.hand} clickHandler={handleClickHand}/>
                             </div>
+                        </div>
+                        <div className="col-1 d-flex align-item-center">
+                            <button className="btn btn-info h-3" onClick={() => {handleEndTurn()}}>end turn</button>
                         </div>
                     </div>
                 </div>

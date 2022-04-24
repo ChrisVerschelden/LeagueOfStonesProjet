@@ -121,6 +121,11 @@ body::-webkit-scrollbar-thumb {
 
 }
 
+.scale-down {
+  transform: scale(.95);
+  animation: none;
+}
+
 @keyframes append-animate {
 	from {
 		transform: scale(0);

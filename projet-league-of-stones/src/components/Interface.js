@@ -47,7 +47,6 @@ class Interface extends React.Component {
             } 
         }
     }
-    c
 
     sendDeck = async () => {
         console.log(this.props.cookies)
