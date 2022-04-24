@@ -125,10 +125,6 @@ export const endTurn = async (session) => {
             "www-authenticate": session
         }
     });
-<<<<<<< HEAD
-    return await data.json()
-=======
->>>>>>> 3de98a561f899c621bb63dbf45d264f91b9f240f
 }
 
 export const finishMatch = async (session) => {
