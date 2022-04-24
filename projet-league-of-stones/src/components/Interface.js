@@ -54,21 +54,29 @@ class Interface extends React.Component {
         })
         let matchInfo = await getMatchInfo(this.props.cookies)
         await delay(1000)
-        console.log(matchInfo)
-        let result2 = await initDeck( this.props.cookies,stringifyDeck(this.state.choosedCardList))
-        await delay(1000)
-        const interval = setInterval(async () => {
-            console.log('LET ME IN')
-            matchInfo = await (await getMatchInfo(this.props.cookies)).json()
-            console.log(matchInfo)
-            if (matchInfo.player1.deck !== 0 && matchInfo.player2.deck !== 0) {
-                clearInterval(interval)
-            }
+        const makingDeck = stringifyDeck(this.state.choosedCardList)
+        const deckDone = await setInterval(async () => {
+            console.log('doing deck')
+            let result2 = await(await initDeck( this.props.cookies,makingDeck)).json()
+            console.log(result2)
+            if (result2.name) {
+                clearInterval(deckDone)
+                await delay(5000)
+                const interval = await setInterval(async () => {
+                    console.log('LET ME IN')
+                    matchInfo = await (await getMatchInfo(this.props.cookies)).json()
+                    console.log(matchInfo)
+                    if (matchInfo.player1.deck !== 0 && matchInfo.player2.deck !== 0) {
+                        clearInterval(interval)
+                        await delay(5000)
+                        document.location.href = '/game'
+                    }
 
-        }, 1000);
-        await delay(1000)
-        console.log(matchInfo)
-        document.location.href = '/game'
+                }, 2000);
+
+            }
+        }, 2000);
+
     }
 
     render() {
