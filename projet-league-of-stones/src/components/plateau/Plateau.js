@@ -1,28 +1,28 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {useState, useEffect} from "react";
 import { useSelector } from 'react-redux';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import PlateauDeck from './PlateauDeck'
-import { getMatchInfo, attackEnemyCard, pickCard, playCard, currentConnectedUser, endTurn, attackPlayer, finishMatch } from "../../utils/queries";
+import CardReact from "../CardReact";
+import {initDeck, getMatchInfo, attackEnemyCard, pickCard, playCard, currentConnectedUser, endTurn, attackPlayer, finishMatch} from "../../utils/queries";
+import {stringifyDeck} from "../../utils/osef";
 import { PlayerCard } from "./PlayerCard";
-// {}
 
 const Plateau = (props) => {
     const session = useSelector(state => state.session);
-
     const [selectedCardAdversary, setSelectedCardAdversary] = useState({selected:false, card: {}})
     const [selectedCardPlayer, setSelectedCardPlayer]       = useState({selected:false, card: {}})
     const [currentPlayer, setPlayer]                        = useState({ player:"" })
     const [board, setBoard]                                 = useState({player1:{board:[]}, player2:{board:[]}})
 
-    // const autorefresh = (duration = 4000) => {
-    //     setInterval(() => {
-    //         updateMachData()
-    //     }, duration)
-    // }
+    const autorefresh = async (ms, num) => {
+        setInterval(() => {
+            updateMachData(num)
+        }, ms)
+    }
 
-    // const delay = ms => new Promise(res => setTimeout(res, ms));
-    //autorefresh();
+    const delay = ms => new Promise(res => setTimeout(res, ms));
 
     const checkStateSelection = async () => {
         if (session && typeof(session) === "string") {
@@ -30,7 +30,7 @@ const Plateau = (props) => {
             if (board.player2.board.length === 0 && selectedCardPlayer.selected === true){
                 console.log('i am there')
                 await attackPlayer(session, selectedCardPlayer.card.key)
-                await getMatchInfo(session)
+                const result = await getMatchInfo(session)
                 setSelectedCardAdversary({selected:false, card: {}})
                 setSelectedCardPlayer({selected:false, card: {}})
                 //await handleEndTurn()
@@ -39,7 +39,7 @@ const Plateau = (props) => {
             if (selectedCardAdversary.selected && selectedCardPlayer.selected) {
                 console.log('i am in : ' + selectedCardPlayer.card.key + " " + selectedCardAdversary.card.key)
                 await attackEnemyCard(session, selectedCardPlayer.card.key, selectedCardAdversary.card.key)
-                await getMatchInfo(session)
+                const result = await getMatchInfo(session)
                 setSelectedCardAdversary({selected:false, card: {}})
                 setSelectedCardPlayer({selected:false, card: {}})
                 //await handleEndTurn()
@@ -86,7 +86,14 @@ const Plateau = (props) => {
         }
     }
 
-    const updateMachData = useCallback(async (playNum = "") => {
+    const handleFinishMatch = async () => {
+        if (session && typeof(session) === "string") {
+            await finishMatch(session)
+            await updateMachData()
+        }
+    }
+
+    const updateMachData = async (playNum = "") => {
         console.log(currentPlayer.player)
         if (session && typeof(session) === "string") {
             let result = await (await getMatchInfo(session)).json()
@@ -97,14 +104,7 @@ const Plateau = (props) => {
                 setBoard({player1: result.player2, player2: result.player1});
             }
         }
-    }, [session, currentPlayer]);
-
-    const handleFinishMatch = useCallback(async () => {
-        if (session && typeof(session) === "string") {
-            await finishMatch(session)
-            await updateMachData()
-        }
-    }, [session, updateMachData]);
+    }
 
 
 
@@ -123,7 +123,7 @@ const Plateau = (props) => {
                     if (result.status !== 'Deck is pending') {
                         clearInterval(interval)
                     }
-    
+
                     }, 2000);
                 if(result.player1.name=== val.toString()) {
                     playNum = "1"
@@ -134,16 +134,17 @@ const Plateau = (props) => {
                     await setPlayer({player : "2"})
                 }
                 await updateMachData(playNum)
+                autorefresh(4000, playNum);
                 console.log("which player")
                 console.log("bonjour")
-    
+
                 if (!result.player1.turn && !result.player2.turn) {
                     await handleFinishMatch();
                 }
             }
         }
         fetchData();
-    }, [handleFinishMatch, session, updateMachData]);
+    }, []);
 
     useEffect(() => { console.log("board"); console.log(board); }, [board]);
 
